@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Independence Score · 30 Days Ready</title>
+<meta name="description" content="What if the government froze your life? Check how much of your life keeps working without the system. 3 minutes, 15 questions.">
+<meta property="og:title" content="What's your Independence Score?">
+<meta property="og:description" content="How much of your life keeps working if the system cuts you off? 3 minutes. 15 questions.">
+<meta name="theme-color" content="#0C1015">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Dark, cinematic: the cold blue-black of "the system", brand red #EE3B1B for alarm and action, mint (Alex's sheet) for independence. */
+:root{
+  --bg:#0C1015; --bg2:#121820; --surface:#161D26; --line:#26303C; --ink:#EEF2F5; --muted:#8D99A6;
+  --red:#EE3B1B; --red-soft:rgba(238,59,27,.14); --mint:#7FD1AE; --mint-soft:rgba(127,209,174,.14); --amber:#F2B04A;
+  --head:"Oswald","Arial Narrow",Impact,sans-serif;
+  --ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --num:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:620px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--head);font-weight:600;line-height:1.05;margin:0;text-wrap:balance;letter-spacing:.005em}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.eyebrow{font-family:var(--num);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--red);color:#fff;font-family:var(--head);font-weight:600;font-size:20px;letter-spacing:.04em;text-transform:uppercase;padding:18px 22px;border-radius:14px;text-decoration:none;transition:transform .1s,filter .2s}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:scale(.985)}
+.btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.sub{font-size:14px;color:var(--muted);text-align:center}
+
+/* landing */
+.hero{min-height:88vh;min-height:88svh;display:flex;flex-direction:column;justify-content:center;gap:26px;padding-block:56px 40px;position:relative}
+.hero::before{content:"";position:absolute;inset:0 -50vw;background:radial-gradient(60% 50% at 70% 20%,rgba(238,59,27,.16),transparent 70%);pointer-events:none;z-index:-1}
+.brand{font-family:var(--head);font-size:15px;letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+.brand i{width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red)}
+.hero h1{font-size:clamp(44px,12vw,72px);text-transform:uppercase}
+.hero h1 em{font-style:normal;color:var(--red)}
+.lede{font-size:19px;color:#C9D2DA;max-width:34ch}
+.facts{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--num);font-size:13px;color:var(--muted)}
+.facts span::before{content:"✓ ";color:var(--mint)}
+section.block{padding-block:44px;border-top:1px solid var(--line);display:grid;gap:22px}
+section.block h2{font-size:34px;text-transform:uppercase}
+.cuts{display:grid;gap:10px;counter-reset:c}
+.cut{display:grid;grid-template-columns:38px 1fr;gap:14px;align-items:start;padding:14px 0;border-bottom:1px solid var(--line)}
+.cut:last-child{border-bottom:0}
+.cut::before{counter-increment:c;content:counter(c,decimal-leading-zero);font-family:var(--num);color:var(--red);font-size:14px;padding-top:3px}
+.cut b{font-family:var(--head);font-weight:600;font-size:20px;text-transform:uppercase;letter-spacing:.02em;display:block}
+.cut span{color:var(--muted);font-size:15px}
+.quote{font-family:var(--head);font-size:26px;line-height:1.2;text-transform:uppercase}
+.quote small{display:block;font-family:var(--ui);text-transform:none;font-size:15px;color:var(--muted);margin-top:10px}
+footer{padding-block:40px 60px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:grid;gap:8px}
+
+/* quiz */
+.quiz{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;gap:26px;padding-block:24px 40px}
+.qtop{display:flex;align-items:center;gap:14px}
+.qtop button{font-family:var(--num);color:var(--muted);font-size:18px;padding:6px}
+.bar{flex:1;height:4px;border-radius:4px;background:var(--line);overflow:hidden}
+.bar div{height:100%;background:var(--red);transition:width .35s}
+.qtop .n{font-family:var(--num);font-size:13px;color:var(--muted)}
+.qcut{font-family:var(--num);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.scene{font-family:var(--head);font-size:clamp(30px,8vw,40px);line-height:1.1;text-transform:none}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:16px 18px;font-size:17px;transition:border-color .15s,background .15s}
+.opt:hover{border-color:#4A5869}
+.opt.sel{border-color:var(--red);background:var(--red-soft)}
+
+/* result */
+.result{padding-block:28px 60px;display:grid;gap:28px}
+.score{display:grid;gap:10px;justify-items:center;text-align:center;padding:30px 20px;border-radius:22px;background:var(--surface);border:1px solid var(--line)}
+.score .big{font-family:var(--num);font-weight:600;font-size:96px;line-height:1;letter-spacing:-.04em}
+.score .big small{font-size:28px;color:var(--muted);letter-spacing:0}
+.score h1{font-size:36px;text-transform:uppercase}
+.score p{color:#C9D2DA;max-width:36ch}
+.meter{width:100%;height:10px;border-radius:10px;background:var(--line);overflow:hidden;margin-top:6px}
+.meter div{height:100%;border-radius:10px}
+.cutrows{display:grid;gap:14px}
+.crow{display:grid;gap:8px;padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line)}
+.crow .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.crow b{font-family:var(--head);font-weight:600;font-size:20px;text-transform:uppercase;letter-spacing:.02em}
+.crow .pct{font-family:var(--num);font-weight:600}
+.crow .meter{height:6px;margin:0}
+.crow p{font-size:15px;color:#C9D2DA}
+.weak{border-color:var(--red)}
+.weak .tag{font-family:var(--num);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+.card{display:grid;gap:16px;padding:22px;border-radius:20px;border:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),var(--surface))}
+.card h2{font-size:30px;text-transform:uppercase}
+.card ul{margin:0;padding-left:20px;display:grid;gap:8px;color:#C9D2DA}
+.price{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.price b{font-family:var(--num);font-size:44px;font-weight:600}
+.price s{font-family:var(--num);color:var(--muted);font-size:20px}
+.price span{font-size:14px;color:var(--amber)}
+form{display:grid;gap:10px}
+input[type=email]{width:100%;font:inherit;font-size:17px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:14px;padding:16px 18px}
+input[type=email]:focus{border-color:var(--red);outline:none}
+.ok{padding:16px;border-radius:14px;background:var(--mint-soft);color:var(--mint);font-weight:500}
+.err{color:var(--red);font-size:14px}
+.retake{justify-self:center;color:var(--muted);font-size:14px;text-decoration:underline;text-underline-offset:3px}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+
+<script>
+/* ================== CONFIG: fill these in ================== */
+const CONFIG = {
+  checkoutUrl: "",          // Whop checkout link for early access
+  brevoFormUrl: "",         // Brevo form action URL (https://...sibforms.com/serve/...)
+  priceNow: 39, priceLater: 59, priceDate: "October 25",
+  accessDate: "October 25"
+};
+/* =========================================================== */
+
+const CUTS = {
+  water:  {name:"Water",      line:"Rainwater you can drink, and enough stored to never wait for the tap."},
+  food:   {name:"Food",       line:"Grow part of what you eat and keep a pantry the store can't take away."},
+  energy: {name:"Energy",     line:"Light, power and a hot meal when the grid goes down."},
+  signal: {name:"Connection", line:"Reach your people and find your way when the internet and networks are off."},
+  money:  {name:"Money",      line:"Crypto you hold yourself, cash, and accounts no single button can freeze."},
+  papers: {name:"Exit",       line:"Documents ready and a plan B country if staying stops being an option."},
+  people: {name:"People",     line:"A local circle to trade with, and skills worth more than money."}
+};
+const ORDER = ["water","food","energy","signal","money","papers","people"];
+
+const Q = [
+ {cut:"water", q:"Tap water stops for a week. What do you drink?", a:["Nothing. We'd have to buy it","A few bottles, a couple of days","Several gallons for each of us","Stored water, plus a filter to make more"]},
+ {cut:"water", q:"Could you turn rainwater into drinking water today?", a:["I wouldn't know where to start","I know it's possible, never tried","I can collect it, not sure about cleaning it","Yes. I collect it and I have a way to purify it"]},
+ {cut:"food",  q:"Stores close tonight. How long could your home eat?", a:["A day or two","About three days","About a week","Two weeks or more"]},
+ {cut:"food",  q:"Do you grow anything you actually eat?", a:["Nothing","A few herbs","Some vegetables in season","A real part of what we eat"]},
+ {cut:"energy",q:"The power is out for three days. What still works?", a:["Nothing. My phone dies on day one","Some flashlights","Power banks and lanterns","Solar or backup power for the essentials"]},
+ {cut:"energy",q:"Could you cook a hot meal with no electricity and no gas line?", a:["No","Maybe on a grill outside","Yes, a camp stove with spare fuel","Yes, and more than one way"]},
+ {cut:"signal",q:"Internet and cell networks go down. How do you reach your family?", a:["I couldn't","We'd figure it out somehow","We agreed on a meeting place","We have radios, mesh or satellite messaging"]},
+ {cut:"signal",q:"Are your maps and important contacts available offline?", a:["Everything lives in the cloud","A few screenshots","Offline maps on my phone","Offline maps plus a paper copy"]},
+ {cut:"money", q:"Your bank app froze tonight. How do you buy food tomorrow?", a:["I couldn't","I'd ask family or friends","A card from another bank","Cash at home, and another way to pay"]},
+ {cut:"money", q:"How many truly separate places does your money live in?", a:["One bank","Two banks in the same country","Banks and some cash at home","Banks, cash, and something I hold myself"]},
+ {cut:"money", q:"If one platform froze you tomorrow, how much would you lose access to?", a:["Almost everything","Most of it","About half","A small part"]},
+ {cut:"papers",q:"You have 15 minutes to leave home. Where are your documents?", a:["Somewhere. I'd have to search","I know where they are","In one folder, ready to grab","Folder, digital copies and a packed bag"]},
+ {cut:"papers",q:"If you had to live in another country next year, could you?", a:["No idea how","Maybe one day","I know where I'd go and how","I already have the documents or residency"]},
+ {cut:"people",q:"Who near you could you trade or share with in a crisis?", a:["Nobody, honestly","Maybe one person","A few neighbors","A real local circle"]},
+ {cut:"people",q:"If money stopped working, what could you trade?", a:["Nothing I can think of","I'm not sure","One useful skill","Several: repair, food, medical, tech"]}
+];
+
+const INSIGHT = {
+ water:["Water is the first thing that runs out, and right now you depend on the tap completely. One rain barrel and a proper filter change that.","You have a start, but not a source. Stored water ends. A way to catch and purify rain doesn't.","You're close. The step left is turning water you collect into water you'd give your kids without thinking."],
+ food:["If the shelves empty, your home has days, not weeks. A real pantry and your first crops are the fastest win on this list.","You'd get through a short shock. Growing even a small part of what you eat is what makes it last.","Strong. Next is preserving what you grow so a bad month doesn't cost you."],
+ energy:["When the grid goes, your home goes dark and your phone dies with it. Light, charging and one way to cook are cheap to fix.","You'd have light for a while. You don't yet have a way to make your own power.","You can ride out outages. A small solar setup turns that into real independence."],
+ signal:["Right now everything you know lives on a network someone else controls. If it switches off, so does your plan.","You'd find your people eventually. Offline tools and a meeting plan make it certain.","Good. A radio or off-grid messaging closes the last gap."],
+ money:["One bank, one app, one button. If it's pressed, you lose access to almost everything you have.","Your money is in fewer places than it looks. Spreading it out is the most important move on this list.","You're ahead of most people. Holding part of it yourself makes it untouchable."],
+ papers:["If you had to leave fast, you'd lose time you don't have. A ready folder takes one evening.","You know where things are, which isn't the same as being ready to go.","Your exit is mostly solved. Keep copies current and the plan B real."],
+ people:["You'd be on your own. In every real crisis, the people next door help first.","There's someone, but not yet a circle you can count on.","You have people. That's worth more than any gear on this list."]
+};
+
+const TIERS = [
+ {max:24, name:"Fully plugged in", color:"var(--red)",  text:"One switch could turn off most of your life. Food, water, money and contact all run through systems you don't control."},
+ {max:49, name:"Plugged in",       color:"var(--amber)",text:"You'd get through a short shock. A longer one, or a frozen account, would leave you depending on someone else's decision."},
+ {max:74, name:"Half out",         color:"var(--amber)",text:"You've started cutting yourself out. A few weak spots still let the system reach you."},
+ {max:100,name:"Independent",      color:"var(--mint)", text:"Most of your life keeps working without the system. Now it's about depth and keeping it current."}
+];
+
+const S = {view:"home", i:0, ans:[]};
+const app = document.getElementById("app");
+const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const track = (name, data) => { try{ if(window.fbq) fbq("trackCustom", name, data||{}); }catch(e){} };
+
+function scores(){
+  const per = {}; ORDER.forEach(k => per[k] = {sum:0, n:0});
+  Q.forEach((q, i) => { per[q.cut].sum += (S.ans[i] ?? 0); per[q.cut].n += 3; });
+  const out = {}; ORDER.forEach(k => out[k] = Math.round(per[k].sum / per[k].n * 100));
+  const total = Math.round(ORDER.reduce((s,k) => s + out[k], 0) / ORDER.length);
+  const weakest = ORDER.slice().sort((a,b) => out[a] - out[b])[0];
+  return {per:out, total, weakest, tier: TIERS.find(t => total <= t.max)};
+}
+
+function priceBlock(){
+  return `<div class="price"><b>$${CONFIG.priceNow}</b><s>$${CONFIG.priceLater}</s><span>Early access price until ${CONFIG.priceDate}</span></div>`;
+}
+function buyHref(){ return CONFIG.checkoutUrl || "#early-access"; }
+
+function viewHome(){
+  return `<div class="wrap">
+  <header class="hero">
+    <div class="brand"><i></i>30 Days Ready</div>
+    <h1>What if the government <em>froze</em> your life?</h1>
+    <p class="lede">Your money, your food, your water, your phone. How much of it would still work tomorrow? Find out in three minutes.</p>
+    <button class="btn" data-go="quiz">Check my Independence Score</button>
+    <div class="facts"><span>15 questions</span><span>3 minutes</span><span>No money amounts or addresses</span></div>
+  </header>
+
+  <section class="block">
+    <div class="eyebrow">What the score measures</div>
+    <h2>Seven ways the system holds you</h2>
+    <div class="cuts">${ORDER.map(k => `<div class="cut"><div><b>${CUTS[k].name}</b><span>${CUTS[k].line}</span></div></div>`).join("")}</div>
+  </section>
+
+  <section class="block">
+    <p class="quote">Cut yourself out of the system. One piece at a time.<small>That's what Alex is doing in the series. Your score shows where you'd start.</small></p>
+    <button class="btn" data-go="quiz">Get my score</button>
+  </section>
+
+  <section class="block" id="early-access">
+    <div class="eyebrow">Coming ${CONFIG.accessDate}</div>
+    <h2>The 30 Days Ready app</h2>
+    <p style="color:#C9D2DA">An AI guide on your phone that builds your path out of the system, for your home, your family and your climate. Step by step, one cut at a time.</p>
+    ${priceBlock()}
+    <a class="btn" href="${buyHref()}" ${CONFIG.checkoutUrl?'target="_blank" rel="noopener"':''} data-buy="landing">Get early access</a>
+    <p class="sub">Access arrives by email on ${CONFIG.accessDate}.</p>
+  </section>
+
+  <footer><div>30 Days Ready · @30daysready</div><div>The story is fiction. The risk is real. This is preparation, not financial, legal or medical advice.</div></footer>
+  </div>`;
+}
+
+function viewQuiz(){
+  const q = Q[S.i];
+  return `<div class="wrap quiz">
+    <div class="qtop"><button data-back aria-label="Back">←</button><div class="bar"><div style="width:${(S.i)/Q.length*100}%"></div></div><span class="n">${S.i+1}/${Q.length}</span></div>
+    <div class="qcut">${CUTS[q.cut].name}</div>
+    <h2 class="scene">${esc(q.q)}</h2>
+    <div class="opts">${q.a.map((t,j) => `<button class="opt ${S.ans[S.i]===j?"sel":""}" data-ans="${j}">${esc(t)}</button>`).join("")}</div>
+  </div>`;
+}
+
+function viewResult(){
+  const r = scores(); const w = r.weakest;
+  return `<div class="wrap result">
+    <div class="eyebrow" style="text-align:center">Your Independence Score</div>
+    <section class="score">
+      <div class="big">${r.total}<small>/100</small></div>
+      <h1 style="color:${r.tier.color}">${r.tier.name}</h1>
+      <div class="meter"><div style="width:${Math.max(3,r.total)}%;background:${r.tier.color}"></div></div>
+      <p>${r.tier.text}</p>
+    </section>
+
+    <section class="cutrows">
+      ${ORDER.slice().sort((a,b)=>r.per[a]-r.per[b]).map(k => {
+        const p = r.per[k], lvl = p < 34 ? 0 : p < 67 ? 1 : 2;
+        const col = lvl===0 ? "var(--red)" : lvl===1 ? "var(--amber)" : "var(--mint)";
+        return `<div class="crow ${k===w?"weak":""}">
+          ${k===w?`<div class="tag">Your weakest point</div>`:""}
+          <div class="top"><b>${CUTS[k].name}</b><span class="pct" style="color:${col}">${p}%</span></div>
+          <div class="meter"><div style="width:${Math.max(3,p)}%;background:${col}"></div></div>
+          <p>${INSIGHT[k][lvl]}</p>
+        </div>`;}).join("")}
+    </section>
+
+    <section class="card" id="report">
+      <div class="eyebrow">Free</div>
+      <h2>Get your full report</h2>
+      <p style="color:#C9D2DA">Your score, your seven cuts, and the first step for your weakest point, ${CUTS[w].name.toLowerCase()}, sent to your inbox.</p>
+      <form id="mail" novalidate>
+        <input type="email" id="email" name="EMAIL" autocomplete="email" placeholder="your@email.com" required>
+        <button class="btn" type="submit">Send my report</button>
+        <p class="err" id="mailerr" hidden></p>
+      </form>
+      <div class="ok" id="mailok" hidden>Sent. Check your inbox in a minute, and your spam folder just in case.</div>
+    </section>
+
+    <section class="card">
+      <div class="eyebrow">Early access · opens ${CONFIG.accessDate}</div>
+      <h2>Get out, one cut at a time</h2>
+      <p style="color:#C9D2DA">The 30 Days Ready app turns this score into your own path out of the system. An AI guide that knows your home, family and climate, and walks you through every cut:</p>
+      <ul>
+        <li>Rainwater to drinking water, sized for your roof or balcony</li>
+        <li>Growing your own food, from a kitchen jar to a real garden</li>
+        <li>Power and a hot meal without the grid</li>
+        <li>Staying in touch when the internet and networks go down</li>
+        <li>Money no single button can freeze, including crypto you hold yourself</li>
+        <li>Documents ready and a plan B country</li>
+        <li>Your local circle and skills worth trading</li>
+      </ul>
+      ${priceBlock()}
+      <a class="btn" href="${buyHref()}" ${CONFIG.checkoutUrl?'target="_blank" rel="noopener"':''} data-buy="result">Get early access for $${CONFIG.priceNow}</a>
+      <p class="sub">One payment. Access arrives by email on ${CONFIG.accessDate}. After that the price is $${CONFIG.priceLater}.</p>
+    </section>
+
+    <button class="retake" data-go="quiz">Retake the check</button>
+  </div>`;
+}
+
+function render(){
+  app.innerHTML = S.view==="home" ? viewHome() : S.view==="quiz" ? viewQuiz() : viewResult();
+  const f = document.getElementById("mail");
+  if (f) f.addEventListener("submit", submitMail);
+}
+
+async function submitMail(e){
+  e.preventDefault();
+  const email = document.getElementById("email").value.trim();
+  const err = document.getElementById("mailerr");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.textContent = "Please enter a valid email."; err.hidden = false; return; }
+  err.hidden = true;
+  const r = scores();
+  const fd = new FormData();
+  fd.append("EMAIL", email);
+  fd.append("SCORE", r.total);
+  fd.append("TIER", r.tier.name);
+  fd.append("WEAKEST", CUTS[r.weakest].name);
+  ORDER.forEach(k => fd.append("S_" + k.toUpperCase(), r.per[k]));
+  fd.append("email_address_check", "");
+  fd.append("locale", "en");
+  try{
+    if (CONFIG.brevoFormUrl) await fetch(CONFIG.brevoFormUrl, {method:"POST", body:fd, mode:"no-cors"});
+    track("ScoreEmail", {score:r.total});
+    document.getElementById("mail").hidden = true;
+    document.getElementById("mailok").hidden = false;
+  }catch(x){
+    err.textContent = "Couldn't send right now. Check your connection and try again."; err.hidden = false;
+  }
+}
+
+app.addEventListener("click", e => {
+  const t = e.target.closest("button,a"); if (!t) return;
+  if (t.dataset.go === "quiz"){ S.view="quiz"; S.i=0; S.ans=[]; track("StartCheck"); render(); scrollTo(0,0); return; }
+  if (t.hasAttribute("data-back")){ if (S.i===0){ S.view="home"; } else S.i--; render(); return; }
+  if (t.dataset.ans !== undefined){
+    S.ans[S.i] = +t.dataset.ans;
+    t.classList.add("sel");
+    setTimeout(() => { if (S.i < Q.length-1){ S.i++; } else { S.view="result"; track("ScoreShown", {score:scores().total}); } render(); scrollTo(0,0); }, 160);
+    return;
+  }
+  if (t.dataset.buy){ track("ClickBuy", {where:t.dataset.buy}); if (!CONFIG.checkoutUrl){ e.preventDefault(); } }
+});
+render();
+</script>
+</body>
+</html>
