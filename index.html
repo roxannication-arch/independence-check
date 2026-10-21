@@ -225,9 +225,7 @@ const CONFIG = {
 
 /* ===== The check: 12 scenes. Core layers set READY days. ===== */
 const Q = [
- {id:"people", tag:"Your home", q:"How many people do you feed?", hint:"Your plan is sized for them.", a:[["Just me",1],["Two of us",2],["Three or four",4],["Five or more",5]]},
- {id:"climate", tag:"Your weather", q:"What hits your city?", hint:"Power and water fail differently in each.", a:[["Cold winters","cold"],["Hot summers","hot"],["Storms and floods","storm"],["Mostly mild","mild"]]},
- {id:"money", tag:"Midnight", q:"Your card is frozen. Groceries tomorrow?", hint:"In 2022 Canada froze at least 257 accounts under emergency powers.", a:[["I couldn't buy anything",1],["I'd ask someone for help",3],["A card from another bank",4],["Cash at home",7]]},
+ {id:"money", tag:"Tonight", q:"Your card freezes tonight. Groceries tomorrow?", a:[["I couldn't buy anything",1],["I'd ask someone for help",3],["A card from another bank",4],["Cash at home",7]]},
  {id:"water", tag:"Day 1", q:"The tap stops. What do you drink?", a:[["Nothing. I'd have to buy it",1],["A few bottles",2],["A few gallons each",5],["Two weeks stored, plus a filter",14]]},
  {id:"power", tag:"Day 1", q:"The grid goes down. What still works?", a:[["Nothing. My phone dies tonight",1],["A couple of flashlights",2],["Power banks and lanterns",4],["Solar or a generator",10]]},
  {id:"food", tag:"Day 2", q:"Stores close. How long can your kitchen feed you?", a:[["A day or two",1],["About three days",3],["About a week",7],["Two weeks or more",14]]},
@@ -236,7 +234,9 @@ const Q = [
  {id:"signal", tag:"Day 3", q:"Network's down. Can you reach your family?", a:[["No",0],["We'd figure it out",1],["We have a meeting place",2],["Radios or satellite",3]]},
  {id:"grow", tag:"Day 5", q:"Do you grow anything you eat?", a:[["Nothing",0],["A few herbs",1],["Some vegetables",2],["A real part of our food",3]]},
  {id:"docs", tag:"Day 7", q:"You have 15 minutes to leave. Your passports?", a:[["Somewhere",0],["I know where",1],["In one folder",2],["Folder, copies and a packed bag",3]]},
- {id:"near", tag:"Day 10", q:"Who near you would help?", a:[["Nobody",0],["Maybe one person",1],["A few neighbors",2],["A real circle",3]]}
+ {id:"near", tag:"Day 10", q:"Who near you would help?", a:[["Nobody",0],["Maybe one person",1],["A few neighbors",2],["A real circle",3]]},
+ {id:"people", tag:"Your home", q:"How many people do you feed?", hint:"Your moves get sized for them.", a:[["Just me",1],["Two of us",2],["Three or four",4],["Five or more",5]]},
+ {id:"climate", tag:"Your weather", q:"What hits your city?", hint:"Your plan changes with it.", a:[["Cold winters","cold"],["Hot summers","hot"],["Storms and floods","storm"],["Mostly mild","mild"]]}
 ];
 const CORE = ["food","water","power","money"];
 const NAME = {food:"Food", water:"Water", power:"Power", money:"Money"};
@@ -274,7 +274,11 @@ function moves(r){
     near:{t:"Meet one neighbor", d:"Say hi. Swap numbers. Ask what they'd need."}
   };
   const extra = ["cook","banks","signal","docs","grow","near"];
+  const CLIM = {cold:{t:"One warm room", d:"Blankets, sealed windows, and a heater rated for indoor use. Everyone sleeps in that room."},
+    hot:{t:"Stay cool without power", d:"Extra water, a battery fan, and the coolest room in the house picked in advance."},
+    storm:{t:"A storm bag", d:"Papers in a waterproof pouch, a radio, and a route to higher ground everyone knows."}};
   r.order.forEach(k => { if (r.days[k] < 30) out.push(lib[k]); });
+  const cl = CLIM[val("climate")]; if (cl) out.splice(2, 0, cl);
   extra.forEach(id => { if ((S.ans[Q.findIndex(q=>q.id===id)] ?? 0) <= 1) out.push(lib[id]); });
   extra.forEach(id => { if (!out.includes(lib[id])) out.push(lib[id]); });
   return out.slice(0,7);
@@ -287,8 +291,8 @@ function renderHud(){
     score = S.ans.length > 2 ? calc().indep : 0;
     ready = answered.length ? Math.min(...answered.map(k => val(k))) : "?"; }
   hud.innerHTML = `<div class="wrap">
-    <div class="cell score"><span class="k">${S.view==="home" ? "SCORE" : "INDEPENDENCE"}</span><span class="v">${score}</span></div>
-    <span class="tag">${S.view==="home" ? "ALEX · DAY 1" : "YOU"}</span>
+    ${S.view==="home" ? `<div class="cell score"><span class="k">ALEX</span><span class="v">DAY 1</span></div>` : `<div class="cell score"><span class="k">INDEPENDENCE</span><span class="v">${score}</span></div>`}
+    <span class="tag">${S.view==="home" ? "" : "YOU"}</span>
     <div class="cell ready"><span class="k">READY</span><span class="v">${ready}${ready==="?"?"":"d"}</span></div></div>`;
 }
 
@@ -308,7 +312,7 @@ const TICKER = ["THEY'RE TAKING YOUR OWNERSHIP STEP BY STEP","WAKE UP","CHECK YO
 const LADDER = [["80+","Everything works.",""],["< 80","No flights. No loans.",""],["< 60","Approved stores only.",""],["< 40","The system picks your home.",""],["< 20","Your account is run for you. Daily allowance.",""],["0","Frozen.","red"]];
 const EVIDENCE = [
   {k:"CANADA · FEB 2022", t:"At least 257 accounts frozen", d:"Bank accounts, corporate accounts and credit cards, frozen under emergency powers during the trucker protests.", src:"Public Safety Canada", url:"https://www.publicsafety.gc.ca/cnt/trnsprnc/brfng-mtrls/prlmntry-bndrs/20221005/14-en.aspx"},
-  {k:"NIGERIA · FEB 2023", t:"Cash ran out at the ATMs", d:"A banknote swap left people queuing for hours. Many couldn't withdraw enough for daily needs. One bank capped withdrawals at 10,000 naira.", src:"CNN", url:"https://abc17news.com/money/cnn-business-consumer/2023/02/08/nigeria-delays-plans-to-replace-its-banknotes-after-chaotic-scenes-at-atms/"},
+  {k:"NIGERIA · FEB 2023", t:"Cash ran out at the ATMs", d:"Old banknotes were pulled. Banks and ATMs ran dry. People paid street agents 4,000 naira to get 20,000 of their own money.", src:"Africanews", url:"https://www.africanews.com/2023/02/24/lack-of-cash-crumbling-business-activities-livelihood-in-nigeria/"},
   {k:"EUROPEAN UNION · JULY 2027", t:"A ceiling on cash", d:"From 10 July 2027, businesses in all 27 member states can't take cash payments above €10,000.", src:"Crowdfund Insider", url:"https://www.crowdfundinsider.com/2026/06/286777-european-union-sets-e10000-limit-on-commercial-cash-payments-from-july-2027/"}
 ];
 const WEEKS = [
@@ -316,6 +320,11 @@ const WEEKS = [
   ["WEEK 2","Cut the money cord","Cash, a second bank, crypto you hold yourself. Cook without gas."],
   ["WEEK 3","Make, don't buy","Rainwater you can drink. Power you recharge. First food you grow."],
   ["WEEK 4","Out of reach","Contact without the network. Papers, plan B, your people."]
+];
+const PREVIEW = [
+  ["DAY 1 · WATER","15 MIN","Store three days of water","One gallon per person per day. Sealed, dark, dated. Family of four: 12 gallons. Start with what you can fill tonight.","+3"],
+  ["DAY 2 · MONEY","10 MIN","Cash in an envelope","Three days of food and gas in small bills. One place only the adults know. Then check your second way to pay.","+4"],
+  ["DAY 3 · POWER","20 MIN","Light and a charged phone","Find every flashlight and battery in the house. One light per person. One power bank that charges a phone three times.","+3"]
 ];
 const CUTS = [
   ["WATER","Water you control","Store it. Filter it. Catch rainwater and make it safe to drink."],
@@ -327,13 +336,14 @@ const CUTS = [
   ["PEOPLE","A circle nearby","Neighbors who'd help, and how to find them before you need them."]
 ];
 const FAQ = [
-  ["What exactly do I get?","A 30-day program. One cut a day from the system: water, food, power, money, signal, papers, people. Each day is a short task, a shopping list if you need one, and your score going up."],
+  ["What exactly do I get?","A web app on your phone. Every day it gives you one task for your home, 10 to 30 minutes, sized to your household and weather. Shopping lists, your score, and a printable copy for when the phone dies."],
+  ["Can I get a refund?","Yes. 7 days from access, for any reason. Write back to the access email."],
   ["When do I get access?","On October 25, by email, to the address you pay with."],
   ["I'm not a prepper. Is this for me?","It's the city version. No bunker, no off-grid cabin. 10 to 30 minutes a day, starting with what you already have."],
   ["Is it the same plan Alex follows?","Yes. Alex runs the same 30 days in the series. Yours is sized for your home, household and weather."],
-  ["What does the gear cost?","It depends on your household. The plan gives you a shopping list week by week, so you never buy everything at once."],
+  ["What does the gear cost?","Week 1 starts with what's already in your kitchen. Each week after has its own short list, so you buy in small steps, never all at once."],
   ["Why $39 now?","Early access. On October 25 it goes to $59."],
-  ["Is the story real?","Alex is fiction. The rules in the evidence file are real, with sources."]
+  ["Who's behind this?","Alex. He's a character, and the 30 days are the same ones he runs in the series. The cases in the evidence file are real, with sources."]
 ];
 
 function viewHome(){
@@ -341,7 +351,7 @@ function viewHome(){
   <div class="ticker" aria-hidden="true"><div class="tk">${(TICKER.join("  ■  ")+"  ■  ").repeat(3)}</div></div>
   <div class="wrap">
   <section class="frame">
-    <div class="eyebrow">WAKE UP</div>
+    <div class="eyebrow">IF YOUR CARD FROZE TONIGHT</div>
     <div class="panel">
       <div class="scene"><div class="sky"></div>
         <div class="bldg" style="left:6%;width:22%;height:62%"></div>
@@ -351,7 +361,7 @@ function viewHome(){
         ${ALEX_SVG}</div>
       <div class="caption">
         <p class="line">They're taking what you own.<br><em>Step by step.</em></p>
-        <p class="sub">First cash. Then your account. Then your choices. Nobody announces it. One rule at a time, for your safety. Find out how much of your life you still own.</p>
+        <p class="sub"><b>How many days would your home last?</b> Water, food, power, cash. Take the 2-minute check. Get your number and the first thing that breaks.</p>
       </div>
     </div>
     <button class="btn" data-go="quiz">Check my independence score</button>
@@ -361,7 +371,7 @@ function viewHome(){
 
   <section class="sec block" id="plan">
     <div class="k">30 DAYS READY · THE PROGRAM</div>
-    <h2 class="h">Take it back.<br><em>One cut a day.</em></h2>
+    <h2 class="h">Take it back.<br><em>In 30 days.</em></h2>
     <p class="lead">They take it step by step. You take it back the same way. 30 days, one thing a day. By day 30 your home runs for a month without them.</p>
     <div class="cuts">${CUTS.map(c=>`<div class="cut"><b>${c[0]}</b><div><strong>${c[1]}</strong><span>${c[2]}</span></div></div>`).join("")}</div>
   </section>
@@ -369,12 +379,8 @@ function viewHome(){
   <section class="sec block">
     <div class="k">HOW THE 30 DAYS GO</div>
     <div class="weeks">${WEEKS.map(w=>`<div class="wk"><span class="wn">${w[0]}</span><b>${w[1]}</b><span>${w[2]}</span></div>`).join("")}</div>
-    <div class="dayc">
-      <div class="dch"><span>DAY 17 · WATER</span><span>25 MIN</span></div>
-      <b>Make rainwater drinkable</b>
-      <span>One barrel, one first-flush diverter, one filter rated for drinking. Boil when in doubt. Drinking water for the whole house, no tap needed.</span>
-      <div class="dcf"><span>INDEPENDENCE</span><span class="up">+4</span></div>
-    </div>
+    <div class="k" style="margin-top:8px">FREE PREVIEW · THE FIRST 3 DAYS</div>
+    ${PREVIEW.map(p=>`<div class="dayc"><div class="dch"><span>${p[0]}</span><span>${p[1]}</span></div><b>${p[2]}</b><span>${p[3]}</span><div class="dcf"><span>INDEPENDENCE</span><span class="up">${p[4]}</span></div></div>`).join("")}
     ${offer("home")}
   </section>
 
@@ -409,7 +415,7 @@ function viewHome(){
     <a class="btn alt" href="${CONFIG.checkoutUrl}" target="_blank" rel="noopener" data-buy="faq">Get early access · $${CONFIG.priceNow}</a>
   </section>
 
-  <footer class="foot"><div>@30daysready · new episode every day at 7PM ET</div><div>The story is fiction. The risk is real.</div><div>This is preparation, not financial, legal or medical advice.</div></footer>
+  <footer class="foot"><div>@30daysready · new episode every day at 7PM ET</div><div>This is preparation, not financial, legal or medical advice.</div></footer>
   </div>
   <div class="stickybar"><div class="wrap"><span>How independent are you?</span><button data-go="quiz">Check my score</button></div></div>`;
 }
@@ -430,7 +436,7 @@ function verdict(r){
   return `You're further than most.<br><em>Not at 30 yet.</em>`;
 }
 function indepBox(r){
-  return `<div class="scorebox"><span class="n" style="color:var(--ready);font-size:44px">${r.indep}</span><p><b style="color:#fff">Your independence score, out of 100.</b><br>The other ${100-r.indep} already belong to them. That's how much of your life one button can switch off.</p></div>`;
+  return `<div class="scorebox"><span class="n" style="color:var(--ready);font-size:44px">${r.indep}</span><p><b style="color:#fff">Your independence score, out of 100.</b><br>Without the system, your home lasts ${r.ready} ${r.ready===1?"day":"days"}. Here's what breaks first.</p></div>`;
 }
 function layerBars(r){
   return `<div class="layers">${CORE.map(k=>{const d=r.days[k], c=d<=3?"var(--alex)":d<14?"var(--ready)":"var(--ok)";
@@ -440,9 +446,9 @@ function offer(where){
   return `<section class="offer">
     <div class="small" style="color:#55606C;font-family:var(--num);font-weight:700;letter-spacing:.12em">EARLY ACCESS · OPENS ${CONFIG.accessDate.toUpperCase()}</div>
     <h2>Take your life back in 30 days</h2>
-    <p>30 Days Ready walks you out of the system one cut a day, built for your home.</p>
+    <p>A web app on your phone from Alex. It walks you out of the system one step a day, built for your home.</p>
     <ul>
-      <li>30 days. One cut a day. 10 to 30 minutes.</li>
+      <li>A web app. Add it to your home screen. One task a day, 10 to 30 minutes.</li>
       <li>Water, food, power, money, signal, papers, people.</li>
       <li>Rainwater, growing food, solar, crypto you hold yourself, a plan B country.</li>
       <li>A shopping list each week, so you never buy everything at once.</li>
@@ -451,7 +457,7 @@ function offer(where){
     </ul>
     <div class="price"><b>$${CONFIG.priceNow}</b><s>$${CONFIG.priceLater}</s><span>UNTIL ${CONFIG.priceDate.toUpperCase()}</span></div>
     <a class="btn" href="${CONFIG.checkoutUrl}" target="_blank" rel="noopener" data-buy="${where}">Get early access</a>
-    <p class="small center" style="color:#55606C">One payment. Access by email on ${CONFIG.accessDate}.</p>
+    <p class="small center" style="color:#55606C">One payment. Your app link arrives by email on ${CONFIG.accessDate}.<br><b style="color:var(--ink)">7-day refund, no questions.</b></p>
   </section>`;
 }
 
