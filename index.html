@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>How independent are you? · 30 Days Ready</title>
 <meta name="description" content="What if the government froze your life? Check your independence score, then unhook from the system in 30 days.">
-<meta property="og:title" content="What if the government froze your life?">
+<meta property="og:title" content="They're taking what you own. Step by step.">
 <meta property="og:description" content="Check your independence score. Free. 2 minutes.">
 <meta name="theme-color" content="#141B23">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -304,7 +304,7 @@ const ALEX_SVG = `<svg viewBox="0 0 160 200" aria-label="Alex" role="img">
   <path d="M70 96 h20" stroke="#000" stroke-width="4" stroke-linecap="round"/>
 </svg>`;
 
-const TICKER = ["LIVE OUTSIDE THE SYSTEM","CHECK YOUR INDEPENDENCE SCORE · FREE","ONE CUT A DAY · 30 DAYS","WATER · FOOD · POWER · MONEY · SIGNAL · PAPERS · PEOPLE","EARLY ACCESS $39 · UNTIL OCT 25","THE STORY IS FICTION. THE RISK IS REAL."];
+const TICKER = ["THEY'RE TAKING YOUR OWNERSHIP STEP BY STEP","WAKE UP","CHECK YOUR INDEPENDENCE SCORE · FREE","ONE CUT A DAY · 30 DAYS","WATER · FOOD · POWER · MONEY · SIGNAL · PAPERS · PEOPLE","EARLY ACCESS $39 · UNTIL OCT 25","THE STORY IS FICTION. THE RISK IS REAL."];
 const LADDER = [["80+","Everything works.",""],["< 80","No flights. No loans.",""],["< 60","Approved stores only.",""],["< 40","The system picks your home.",""],["< 20","Your account is run for you. Daily allowance.",""],["0","Frozen.","red"]];
 const EVIDENCE = [
   {k:"CANADA · FEB 2022", t:"At least 257 accounts frozen", d:"Bank accounts, corporate accounts and credit cards, frozen under emergency powers during the trucker protests.", src:"Public Safety Canada", url:"https://www.publicsafety.gc.ca/cnt/trnsprnc/brfng-mtrls/prlmntry-bndrs/20221005/14-en.aspx"},
@@ -341,7 +341,7 @@ function viewHome(){
   <div class="ticker" aria-hidden="true"><div class="tk">${(TICKER.join("  ■  ")+"  ■  ").repeat(3)}</div></div>
   <div class="wrap">
   <section class="frame">
-    <div class="eyebrow">LIVE OUTSIDE THE SYSTEM</div>
+    <div class="eyebrow">WAKE UP</div>
     <div class="panel">
       <div class="scene"><div class="sky"></div>
         <div class="bldg" style="left:6%;width:22%;height:62%"></div>
@@ -350,8 +350,8 @@ function viewHome(){
         <div class="plate" style="right:12px;top:12px">DAY 1</div>
         ${ALEX_SVG}</div>
       <div class="caption">
-        <p class="line">What if the government<br><em>froze your life?</em></p>
-        <p class="sub">Your money, water, power and phone all run on someone else's switch. One click, and it's off. Find out how much of your life is still yours.</p>
+        <p class="line">They're taking what you own.<br><em>Step by step.</em></p>
+        <p class="sub">First cash. Then your account. Then your choices. Nobody announces it. One rule at a time, for your safety. Find out how much of your life you still own.</p>
       </div>
     </div>
     <button class="btn" data-go="quiz">Check my independence score</button>
@@ -361,8 +361,8 @@ function viewHome(){
 
   <section class="sec block" id="plan">
     <div class="k">30 DAYS READY · THE PROGRAM</div>
-    <h2 class="h">Unhook from the system.<br><em>One cut a day.</em></h2>
-    <p class="lead">A 30-day program. Every day you take one thing back from the system. By day 30 your home keeps running for a month without it.</p>
+    <h2 class="h">Take it back.<br><em>One cut a day.</em></h2>
+    <p class="lead">They take it step by step. You take it back the same way. 30 days, one thing a day. By day 30 your home runs for a month without them.</p>
     <div class="cuts">${CUTS.map(c=>`<div class="cut"><b>${c[0]}</b><div><strong>${c[1]}</strong><span>${c[2]}</span></div></div>`).join("")}</div>
   </section>
 
@@ -380,8 +380,8 @@ function viewHome(){
 
   <section class="sec block">
     <div class="k">THE STORY · YOU VOTE</div>
-    <h2 class="h">Alex is doing it<br><em>on Instagram.</em></h2>
-    <p class="lead">In Alex's world cash is illegal. All money lives in one app, and a score from 0 to 100 decides how he lives. He has 2 days of independence. He's going for 30. Every day you vote his next move.</p>
+    <h2 class="h">Alex woke up<br><em>on day 1.</em></h2>
+    <p class="lead">In Alex's world cash is illegal. All money lives in one app, and a score from 0 to 100 decides how he lives. Every episode they take one more thing. He has 2 days of independence. He's going for 30. Every day you vote his next move.</p>
     <div class="ladder">${LADDER.map(([s,t,c])=>`<div class="rung ${c}"><b>${s}</b><span>${t}</span></div>`).join("")}</div>
     <div class="steps3">
       <div><b>01</b><span>A new episode drops at 7PM ET.</span></div>
@@ -391,14 +391,14 @@ function viewHome(){
   </section>
 
   <section class="sec block">
-    <div class="k">THE EVIDENCE FILE</div>
-    <h2 class="h">The story is fiction.<br><em>The risk is real.</em></h2>
+    <div class="k">THE EVIDENCE FILE · IT ALREADY STARTED</div>
+    <h2 class="h">The story is fiction.<br><em>The steps are real.</em></h2>
     <div class="evid">${EVIDENCE.map(e=>`<article class="ev"><div class="stampreal">REAL</div><div class="ek">${e.k}</div><b>${e.t}</b><p>${e.d}</p><a href="${e.url}" target="_blank" rel="noopener">Source: ${e.src} ↗</a></article>`).join("")}</div>
   </section>
 
   <section class="sec block">
     <div class="k">START HERE</div>
-    <h2 class="h">How independent<br><em>are you?</em></h2>
+    <h2 class="h">How much do you<br><em>still own?</em></h2>
     <p class="lead">12 questions. 2 minutes. No addresses, no amounts. You get your score, how many days you'd last, and what breaks first.</p>
     <button class="btn" data-go="quiz">Check my independence score</button>
   </section>
@@ -430,7 +430,7 @@ function verdict(r){
   return `You're further than most.<br><em>Not at 30 yet.</em>`;
 }
 function indepBox(r){
-  return `<div class="scorebox"><span class="n" style="color:var(--ready);font-size:44px">${r.indep}</span><p><b style="color:#fff">Your independence score, out of 100.</b><br>The other ${100-r.indep} belong to the system. That's how much of your life one button can switch off.</p></div>`;
+  return `<div class="scorebox"><span class="n" style="color:var(--ready);font-size:44px">${r.indep}</span><p><b style="color:#fff">Your independence score, out of 100.</b><br>The other ${100-r.indep} already belong to them. That's how much of your life one button can switch off.</p></div>`;
 }
 function layerBars(r){
   return `<div class="layers">${CORE.map(k=>{const d=r.days[k], c=d<=3?"var(--alex)":d<14?"var(--ready)":"var(--ok)";
@@ -439,7 +439,7 @@ function layerBars(r){
 function offer(where){
   return `<section class="offer">
     <div class="small" style="color:#55606C;font-family:var(--num);font-weight:700;letter-spacing:.12em">EARLY ACCESS · OPENS ${CONFIG.accessDate.toUpperCase()}</div>
-    <h2>Unhook from the system in 30 days</h2>
+    <h2>Take your life back in 30 days</h2>
     <p>30 Days Ready walks you out of the system one cut a day, built for your home.</p>
     <ul>
       <li>30 days. One cut a day. 10 to 30 minutes.</li>
