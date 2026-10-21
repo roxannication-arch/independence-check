@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>How many days do you have? · 30 Days Ready</title>
-<meta name="description" content="Cash is illegal now. A score decides how you live. Alex has 2 days. How many do you have?">
-<meta property="og:title" content="Alex has 2 days. How many do you have?">
-<meta property="og:description" content="Check your READY. 2 minutes. 12 questions.">
+<title>How independent are you? · 30 Days Ready</title>
+<meta name="description" content="What if the government froze your life? Check your independence score, then unhook from the system in 30 days.">
+<meta property="og:title" content="What if the government froze your life?">
+<meta property="og:description" content="Check your independence score. Free. 2 minutes.">
 <meta name="theme-color" content="#141B23">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -196,6 +196,15 @@ input[type=email]{width:100%;font:inherit;font-size:17px;color:var(--ink);backgr
 .stickybar b{color:#fff;font-size:18px}
 .stickybar a{background:var(--alex);color:#fff;text-decoration:none;font-family:var(--head);font-weight:700;text-transform:uppercase;letter-spacing:.04em;border:2px solid #000;border-radius:10px;padding:10px 14px;white-space:nowrap}
 body.home{padding-bottom:70px}
+.textlink{justify-self:center;color:var(--cold2);font-size:15px;text-decoration:underline;text-underline-offset:4px}
+.under{font-family:var(--num);font-size:12px;letter-spacing:.08em;color:var(--cold);text-align:center;margin-top:-10px}
+.cuts{display:grid;gap:10px}
+.cut{display:grid;grid-template-columns:96px 1fr;background:var(--panel);color:var(--ink);border:2px solid #000;border-radius:12px;overflow:hidden}
+.cut b{background:var(--ink);color:var(--ready);font-family:var(--num);font-size:13px;letter-spacing:.1em;display:flex;align-items:center;padding:12px 10px}
+.cut div{padding:12px 14px;display:grid;gap:2px}
+.cut strong{font-family:var(--head);text-transform:uppercase;font-size:19px;line-height:1.1}
+.cut span{font-size:14px;color:#2A3440}
+.stickybar button{background:var(--alex);color:#fff;font-family:var(--head);font-weight:700;text-transform:uppercase;letter-spacing:.04em;border:2px solid #000;border-radius:10px;padding:10px 14px;white-space:nowrap}
 @media (max-width:380px){.h{font-size:34px}.weeks{grid-template-columns:1fr}}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -246,7 +255,7 @@ function calc(){
   const indep = prep.reduce((s,x)=>s+x,0) / prep.length;
   const score = Math.round(97 - indep * 70);
   const order = CORE.slice().sort((a,b) => days[a]-days[b]);
-  return {days, ready, score, order, n: val("people") || 1};
+  return {days, ready, score, indep: Math.round(indep*100), order, n: val("people") || 1};
 }
 
 /* first 7 moves, weakest first */
@@ -275,10 +284,10 @@ function renderHud(){
   let score = 100, ready;
   if (S.view === "home") ready = CONFIG.alexDays;
   else { const answered = CORE.filter(k => val(k)!=null);
-    score = S.ans.length > 2 ? calc().score : 100;
+    score = S.ans.length > 2 ? calc().indep : 0;
     ready = answered.length ? Math.min(...answered.map(k => val(k))) : "?"; }
   hud.innerHTML = `<div class="wrap">
-    <div class="cell score"><span class="k">SCORE</span><span class="v">${score}</span></div>
+    <div class="cell score"><span class="k">${S.view==="home" ? "SCORE" : "INDEPENDENCE"}</span><span class="v">${score}</span></div>
     <span class="tag">${S.view==="home" ? "ALEX · DAY 1" : "YOU"}</span>
     <div class="cell ready"><span class="k">READY</span><span class="v">${ready}${ready==="?"?"":"d"}</span></div></div>`;
 }
@@ -295,7 +304,7 @@ const ALEX_SVG = `<svg viewBox="0 0 160 200" aria-label="Alex" role="img">
   <path d="M70 96 h20" stroke="#000" stroke-width="4" stroke-linecap="round"/>
 </svg>`;
 
-const TICKER = ["SEASON 1 · ALEX HAS 2 DAYS","GOAL · 30 DAYS","NEW EPISODE · 7PM ET","VOTE · ONE WORD IN THE COMMENTS","EARLY ACCESS $39 · UNTIL OCT 25","THE STORY IS FICTION. THE RISK IS REAL."];
+const TICKER = ["LIVE OUTSIDE THE SYSTEM","CHECK YOUR INDEPENDENCE SCORE · FREE","ONE CUT A DAY · 30 DAYS","WATER · FOOD · POWER · MONEY · SIGNAL · PAPERS · PEOPLE","EARLY ACCESS $39 · UNTIL OCT 25","THE STORY IS FICTION. THE RISK IS REAL."];
 const LADDER = [["80+","Everything works.",""],["< 80","No flights. No loans.",""],["< 60","Approved stores only.",""],["< 40","The system picks your home.",""],["< 20","Your account is run for you. Daily allowance.",""],["0","Frozen.","red"]];
 const EVIDENCE = [
   {k:"CANADA · FEB 2022", t:"At least 257 accounts frozen", d:"Bank accounts, corporate accounts and credit cards, frozen under emergency powers during the trucker protests.", src:"Public Safety Canada", url:"https://www.publicsafety.gc.ca/cnt/trnsprnc/brfng-mtrls/prlmntry-bndrs/20221005/14-en.aspx"},
@@ -303,15 +312,25 @@ const EVIDENCE = [
   {k:"EUROPEAN UNION · JULY 2027", t:"A ceiling on cash", d:"From 10 July 2027, businesses in all 27 member states can't take cash payments above €10,000.", src:"Crowdfund Insider", url:"https://www.crowdfundinsider.com/2026/06/286777-european-union-sets-e10000-limit-on-commercial-cash-payments-from-july-2027/"}
 ];
 const WEEKS = [
-  ["WEEK 1","The first 72 hours","Water, light, cash, three days of food. The things that run out first."],
-  ["WEEK 2","A week without the system","A way to cook. A second way to pay. Numbers on paper."],
-  ["WEEK 3","Two weeks","Water you can make, not just store. Power you can recharge."],
-  ["WEEK 4","Thirty days","Food you grow. One folder. People nearby who'd help."]
+  ["WEEK 1","Last 72 hours","Water, light, cash, food. The things that run out first."],
+  ["WEEK 2","Cut the money cord","Cash, a second bank, crypto you hold yourself. Cook without gas."],
+  ["WEEK 3","Make, don't buy","Rainwater you can drink. Power you recharge. First food you grow."],
+  ["WEEK 4","Out of reach","Contact without the network. Papers, plan B, your people."]
+];
+const CUTS = [
+  ["WATER","Water you control","Store it. Filter it. Catch rainwater and make it safe to drink."],
+  ["FOOD","Food off the shelf","A 30-day pantry, plus food you grow. A balcony is enough to start."],
+  ["POWER","Power off the grid","Light, charged phones, a small solar setup. Heat or cool one room."],
+  ["MONEY","Money no one can freeze","Cash at home. A second bank. Crypto in a wallet only you control."],
+  ["SIGNAL","Contact when it's down","Offline maps. Radios. A family plan for when phones go quiet."],
+  ["PAPERS","A way out","Every document in one folder. A plan B country, mapped out."],
+  ["PEOPLE","A circle nearby","Neighbors who'd help, and how to find them before you need them."]
 ];
 const FAQ = [
+  ["What exactly do I get?","A 30-day program. One cut a day from the system: water, food, power, money, signal, papers, people. Each day is a short task, a shopping list if you need one, and your score going up."],
   ["When do I get access?","On October 25, by email, to the address you pay with."],
-  ["Is it the same plan Alex follows?","Yes. The same steps, sized for your home, your household and your weather."],
-  ["I'm not a prepper. Is this for me?","It's the city version. No bunker. 10 to 20 minutes a day, starting with what you already have."],
+  ["I'm not a prepper. Is this for me?","It's the city version. No bunker, no off-grid cabin. 10 to 30 minutes a day, starting with what you already have."],
+  ["Is it the same plan Alex follows?","Yes. Alex runs the same 30 days in the series. Yours is sized for your home, household and weather."],
   ["What does the gear cost?","It depends on your household. The plan gives you a shopping list week by week, so you never buy everything at once."],
   ["Why $39 now?","Early access. On October 25 it goes to $59."],
   ["Is the story real?","Alex is fiction. The rules in the evidence file are real, with sources."]
@@ -322,7 +341,7 @@ function viewHome(){
   <div class="ticker" aria-hidden="true"><div class="tk">${(TICKER.join("  ■  ")+"  ■  ").repeat(3)}</div></div>
   <div class="wrap">
   <section class="frame">
-    <div class="eyebrow">A SURVIVAL STORY ON INSTAGRAM · YOU VOTE</div>
+    <div class="eyebrow">LIVE OUTSIDE THE SYSTEM</div>
     <div class="panel">
       <div class="scene"><div class="sky"></div>
         <div class="bldg" style="left:6%;width:22%;height:62%"></div>
@@ -331,42 +350,44 @@ function viewHome(){
         <div class="plate" style="right:12px;top:12px">DAY 1</div>
         ${ALEX_SVG}</div>
       <div class="caption">
-        <p class="line">Cash is illegal now.<br>A score decides <em>how you live.</em></p>
-        <p class="sub">This is Alex. He has 2 days. He's going for 30. You pick his moves, and you build your own 30 with him.</p>
+        <p class="line">What if the government<br><em>froze your life?</em></p>
+        <p class="sub">Your money, water, power and phone all run on someone else's switch. One click, and it's off. Find out how much of your life is still yours.</p>
       </div>
     </div>
-    <a class="btn" href="${CONFIG.checkoutUrl}" target="_blank" rel="noopener" data-buy="hero">Start my 30 days · $${CONFIG.priceNow}</a>
-    <button class="btn alt" data-go="quiz">Check my READY · free</button>
-    <div class="facts"><span>EARLY ACCESS UNTIL ${CONFIG.priceDate.toUpperCase()}</span><span>THEN $${CONFIG.priceLater}</span></div>
+    <button class="btn" data-go="quiz">Check my independence score</button>
+    <div class="under">FREE · 2 MINUTES · 12 QUESTIONS</div>
+    <a class="textlink" href="#plan">Or see how to unhook in 30 days ↓</a>
+  </section>
+
+  <section class="sec block" id="plan">
+    <div class="k">30 DAYS READY · THE PROGRAM</div>
+    <h2 class="h">Unhook from the system.<br><em>One cut a day.</em></h2>
+    <p class="lead">A 30-day program. Every day you take one thing back from the system. By day 30 your home keeps running for a month without it.</p>
+    <div class="cuts">${CUTS.map(c=>`<div class="cut"><b>${c[0]}</b><div><strong>${c[1]}</strong><span>${c[2]}</span></div></div>`).join("")}</div>
   </section>
 
   <section class="sec block">
-    <div class="k">THE WORLD</div>
-    <h2 class="h">One app. One score.<br><em>Every door.</em></h2>
-    <p class="lead">Overnight, cash was cancelled. All money moved into one app. Everyone got a score from 0 to 100, based on credit and spending. Nothing is banned. Doors just close.</p>
-    <div class="ladder">${LADDER.map(([s,t,c])=>`<div class="rung ${c}"><b>${s}</b><span>${t}</span></div>`).join("")}</div>
-    <p class="small">Each episode adds one new rule. "For your safety."</p>
-  </section>
-
-  <section class="sec block">
-    <div class="k">THE COUNTERS</div>
-    <div class="twin">
-      <div class="cnt"><span class="cl">SCORE</span><span class="cv" style="color:var(--cold2)">100</span><span class="cd">The system's grade. Every step Alex takes to prepare, it drops.</span></div>
-      <div class="cnt"><span class="cl">READY</span><span class="cv" style="color:var(--ready)">2d</span><span class="cd">How long he'd last without the system. Goal: 30.</span></div>
+    <div class="k">HOW THE 30 DAYS GO</div>
+    <div class="weeks">${WEEKS.map(w=>`<div class="wk"><span class="wn">${w[0]}</span><b>${w[1]}</b><span>${w[2]}</span></div>`).join("")}</div>
+    <div class="dayc">
+      <div class="dch"><span>DAY 17 · WATER</span><span>25 MIN</span></div>
+      <b>Make rainwater drinkable</b>
+      <span>One barrel, one first-flush diverter, one filter rated for drinking. Boil when in doubt. Drinking water for the whole house, no tap needed.</span>
+      <div class="dcf"><span>INDEPENDENCE</span><span class="up">+4</span></div>
     </div>
-    <div class="goal"><div class="gbar"><div style="width:${CONFIG.alexDays/30*100}%"></div></div><div class="gl"><span>READY ${CONFIG.alexDays}</span><span>GOAL 30</span></div></div>
-    <p class="lead">The question of the season: does Alex reach 30 days before the score locks him in?</p>
+    ${offer("home")}
   </section>
 
   <section class="sec block">
-    <div class="k">HOW IT WORKS</div>
-    <h2 class="h">You write<br><em>the next day.</em></h2>
+    <div class="k">THE STORY · YOU VOTE</div>
+    <h2 class="h">Alex is doing it<br><em>on Instagram.</em></h2>
+    <p class="lead">In Alex's world cash is illegal. All money lives in one app, and a score from 0 to 100 decides how he lives. He has 2 days of independence. He's going for 30. Every day you vote his next move.</p>
+    <div class="ladder">${LADDER.map(([s,t,c])=>`<div class="rung ${c}"><b>${s}</b><span>${t}</span></div>`).join("")}</div>
     <div class="steps3">
       <div><b>01</b><span>A new episode drops at 7PM ET.</span></div>
       <div><b>02</b><span>It ends with two moves. Comment one word on the reel.</span></div>
       <div><b>03</b><span>The majority writes the next day. Voting closes 3PM ET.</span></div>
     </div>
-    <p class="small">Every choice costs SCORE. The winning move always has a weak spot. The next episode tests it.</p>
   </section>
 
   <section class="sec block">
@@ -375,36 +396,22 @@ function viewHome(){
     <div class="evid">${EVIDENCE.map(e=>`<article class="ev"><div class="stampreal">REAL</div><div class="ek">${e.k}</div><b>${e.t}</b><p>${e.d}</p><a href="${e.url}" target="_blank" rel="noopener">Source: ${e.src} ↗</a></article>`).join("")}</div>
   </section>
 
-  <section class="sec block" id="plan">
-    <div class="k">THE PLAN · EARLY ACCESS</div>
-    <h2 class="h">Build your own<br><em>30 days.</em></h2>
-    <p class="lead">Alex is building his 30, one step a day. You get the same path, sized for your home.</p>
-    <div class="weeks">${WEEKS.map(w=>`<div class="wk"><span class="wn">${w[0]}</span><b>${w[1]}</b><span>${w[2]}</span></div>`).join("")}</div>
-    <div class="dayc">
-      <div class="dch"><span>DAY 1 · WATER</span><span>15 MIN</span></div>
-      <b>Store three days of water</b>
-      <span>One gallon per person per day. Sealed, dark, dated. For a family of four: 12 gallons.</span>
-      <div class="dcf"><span>READY</span><span class="up">1d → 3d</span></div>
-    </div>
-    ${offer("home")}
-  </section>
-
   <section class="sec block">
-    <div class="k">NOT SURE YET?</div>
-    <h2 class="h">How many days<br><em>do you have?</em></h2>
-    <p class="lead">12 questions. 2 minutes. No addresses, no amounts. See where you stand next to Alex.</p>
-    <button class="btn alt" data-go="quiz">Check my READY</button>
+    <div class="k">START HERE</div>
+    <h2 class="h">How independent<br><em>are you?</em></h2>
+    <p class="lead">12 questions. 2 minutes. No addresses, no amounts. You get your score, how many days you'd last, and what breaks first.</p>
+    <button class="btn" data-go="quiz">Check my independence score</button>
   </section>
 
   <section class="sec block">
     <div class="k">BEFORE YOU BUY</div>
     <div class="faq">${FAQ.map(([q,a])=>`<details><summary>${q}</summary><p>${a}</p></details>`).join("")}</div>
-    <a class="btn" href="${CONFIG.checkoutUrl}" target="_blank" rel="noopener" data-buy="faq">Start my 30 days · $${CONFIG.priceNow}</a>
+    <a class="btn alt" href="${CONFIG.checkoutUrl}" target="_blank" rel="noopener" data-buy="faq">Get early access · $${CONFIG.priceNow}</a>
   </section>
 
   <footer class="foot"><div>@30daysready · new episode every day at 7PM ET</div><div>The story is fiction. The risk is real.</div><div>This is preparation, not financial, legal or medical advice.</div></footer>
   </div>
-  <div class="stickybar"><div class="wrap"><span><b>$${CONFIG.priceNow}</b> until ${CONFIG.priceDate}</span><a href="${CONFIG.checkoutUrl}" target="_blank" rel="noopener" data-buy="sticky">Start my 30 days</a></div></div>`;
+  <div class="stickybar"><div class="wrap"><span>How independent are you?</span><button data-go="quiz">Check my score</button></div></div>`;
 }
 
 function viewQuiz(){
@@ -422,6 +429,9 @@ function verdict(r){
   if (r.ready < 14) return `You're ahead of Alex.<br><em>For now.</em>`;
   return `You're further than most.<br><em>Not at 30 yet.</em>`;
 }
+function indepBox(r){
+  return `<div class="scorebox"><span class="n" style="color:var(--ready);font-size:44px">${r.indep}</span><p><b style="color:#fff">Your independence score, out of 100.</b><br>The other ${100-r.indep} belong to the system. That's how much of your life one button can switch off.</p></div>`;
+}
 function layerBars(r){
   return `<div class="layers">${CORE.map(k=>{const d=r.days[k], c=d<=3?"var(--alex)":d<14?"var(--ready)":"var(--ok)";
     return `<div class="layer"><span>${NAME[k].toUpperCase()}</span><div class="track"><div class="fill" style="width:${Math.max(4,Math.min(100,d/30*100))}%;background:${c}"></div></div><span class="dd" style="color:${c}">${d}d</span></div>`}).join("")}</div>`;
@@ -429,17 +439,18 @@ function layerBars(r){
 function offer(where){
   return `<section class="offer">
     <div class="small" style="color:#55606C;font-family:var(--num);font-weight:700;letter-spacing:.12em">EARLY ACCESS · OPENS ${CONFIG.accessDate.toUpperCase()}</div>
-    <h2>Build your own 30 days</h2>
-    <p>Alex is building his 30, one step a day. You get the same path, built for your home.</p>
+    <h2>Unhook from the system in 30 days</h2>
+    <p>30 Days Ready walks you out of the system one cut a day, built for your home.</p>
     <ul>
-      <li>One step a day. 10 to 20 minutes.</li>
-      <li>Shopping lists for your household, week by week.</li>
-      <li>Water. Food. Power. Money. Papers. People.</li>
-      <li>Your READY goes up with every step.</li>
+      <li>30 days. One cut a day. 10 to 30 minutes.</li>
+      <li>Water, food, power, money, signal, papers, people.</li>
+      <li>Rainwater, growing food, solar, crypto you hold yourself, a plan B country.</li>
+      <li>A shopping list each week, so you never buy everything at once.</li>
+      <li>Your independence score climbs with every step.</li>
       <li>A paper copy for when the phone dies.</li>
     </ul>
     <div class="price"><b>$${CONFIG.priceNow}</b><s>$${CONFIG.priceLater}</s><span>UNTIL ${CONFIG.priceDate.toUpperCase()}</span></div>
-    <a class="btn" href="${CONFIG.checkoutUrl}" target="_blank" rel="noopener" data-buy="${where}">Start my 30 days</a>
+    <a class="btn" href="${CONFIG.checkoutUrl}" target="_blank" rel="noopener" data-buy="${where}">Get early access</a>
     <p class="small center" style="color:#55606C">One payment. Access by email on ${CONFIG.accessDate}.</p>
   </section>`;
 }
@@ -447,16 +458,16 @@ function offer(where){
 function viewTeaser(){
   const r = calc();
   return `<div class="wrap result">
+    ${indepBox(r)}
     <div class="vs"><div class="you"><span class="who">YOU</span><span class="d">${r.ready}</span><span class="u">DAYS</span></div>
       <div class="alex"><span class="who">ALEX</span><span class="d">${CONFIG.alexDays}</span><span class="u">DAYS</span></div></div>
     <p class="verdict">${verdict(r)}</p>
-    <div class="scorebox"><span class="n">${r.score}</span><p>Your SCORE. The system trusts you. That's how much it owns.</p></div>
     ${layerBars(r)}
     <section class="locked" id="report">
       <div class="peek"><div>DAY ${r.days[r.order[0]]}: ${esc(BREAKS[r.order[0]])}</div><div>DAY ${r.days[r.order[1]]}: ████████ ████</div><div>MOVE 1: ████ ████████ ██</div><div>MOVE 2: ███████ ████ ██████</div><div>MOVE 3: ████ ██████</div></div>
       <div class="gate">
-        <h3>Your full report</h3>
-        <ul><li>What breaks first, day by day</li><li>Your first 7 moves, sized for your home</li><li>Where the system holds you hardest</li></ul>
+        <h3>Your full independence report</h3>
+        <ul><li>What breaks first, day by day</li><li>Your first 7 moves, sized for your home</li><li>How to start cutting the cord this week</li></ul>
         <form id="mail" novalidate>
           <input type="email" id="email" autocomplete="email" placeholder="your@email.com" required>
           <div style="height:10px"></div>
@@ -475,18 +486,18 @@ function viewFull(){
   const r = calc(); const mv = moves(r);
   const tl = r.order.filter(k => r.days[k] < 30).map(k => `<div class="tl"><div class="when">DAY ${r.days[k]}</div><div class="what">${esc(BREAKS[k])}</div></div>`).join("");
   return `<div class="wrap result">
-    <div class="sec"><div class="k">YOUR READY REPORT</div>
+    <div class="sec"><div class="k">YOUR INDEPENDENCE REPORT</div>
+      ${indepBox(r)}
       <div class="vs"><div class="you"><span class="who">YOU</span><span class="d">${r.ready}</span><span class="u">DAYS</span></div>
         <div class="alex"><span class="who">ALEX</span><span class="d">${CONFIG.alexDays}</span><span class="u">DAYS</span></div></div>
       <p class="verdict">${verdict(r)}</p>
     </div>
-    <div class="scorebox"><span class="n">${r.score}</span><p>Your SCORE. The higher it is, the more of your life one button can switch off.</p></div>
     <div class="sec"><div class="k">WHAT BREAKS FIRST</div>
       <div class="timeline">${tl}<div class="tl goal"><div class="when">DAY 30</div><div class="what">Alex's goal. And yours.</div></div></div></div>
     <div class="sec"><div class="k">YOUR LAYERS</div>${layerBars(r)}</div>
     <div class="sec"><div class="k">YOUR FIRST 7 MOVES · ${r.n} ${r.n>1?"PEOPLE":"PERSON"}</div>
       <div class="moves">${mv.map((m,i)=>`<div class="move"><div class="dn">D${i+1}</div><div><b>${esc(m.t)}</b><span>${esc(m.d)}</span></div></div>`).join("")}</div>
-      <p class="small">That's week one. Days 8 to 30 are in the plan.</p></div>
+      <p class="small">That's week one. Days 8 to 30 are in the program: rainwater, growing food, solar, money no one can freeze, a plan B.</p></div>
     ${offer("full")}
     <footer class="foot"><div>The story is fiction. The risk is real.</div><div>This is preparation, not financial, legal or medical advice.</div></footer>
   </div>`;
