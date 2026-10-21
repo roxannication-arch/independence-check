@@ -219,6 +219,7 @@ body.home{padding-bottom:70px}
 const CONFIG = {
   checkoutUrl: "https://commas.com/checkout/DDRZxndcYL2ZbKT",
   leadUrl: "https://c59323b9.sibforms.com/serve/MUIFALNpbgoNP8XOQxofXDSQ6Kj8igvaVDUZ7BI8tYY1VJY-vmoEpaGovlsLsk2cqqQyh2OhV8IXmtKBGnELA3Jzc8BeU1PA8xa_yc9Oy9AH6rhdPYvB0TrYjMv-p2WB3H9A5XnjwBRurZwKoV8pPLn1KSGxFRygcZvNIo1151o_GoQDwDA2VXpn-gQNLuASIjZgRQNMZ1D-1k2xnw==",
+  buyerUrl: "https://c59323b9.sibforms.com/serve/MUIFACC7H_8HkLnCxVLY-p5miQqqrJz2nsHnZwnfIVhrynIr2PP1YRlCCxPZ4k8CbkIqlbBlN4JNKc0wCgoBsthU8AB5igOXomN2JYtVRLSVaDf34fczywS4QZZLiRfbvUdzSWN9_OV_LwsRMgTD7CV66IRw_atnVfsSBcAsNyBXhhEumOACaB7COyX7KIT3vz8idc_gq2n9OMs4cA==",
   priceNow: 39, priceLater: 59, priceDate: "October 25", accessDate: "October 25",
   alexDays: 2
 };
@@ -285,6 +286,7 @@ function moves(r){
 }
 
 function renderHud(){
+  if (S.view === "paid"){ hud.innerHTML = `<div class="wrap"><div class="cell score"><span class="k">ALEX</span><span class="v">DAY 1</span></div><span class="tag">EARLY ACCESS</span><div class="cell ready"><span class="k">READY</span><span class="v">2d</span></div></div>`; return; }
   let score = 100, ready;
   if (S.view === "home") ready = CONFIG.alexDays;
   else { const answered = CORE.filter(k => val(k)!=null);
@@ -505,11 +507,46 @@ function viewFull(){
   </div>`;
 }
 
+function viewPaid(){
+  return `<div class="wrap result">
+    <div class="sec"><div class="k">30 DAYS READY · EARLY ACCESS</div>
+      <h2 class="h">You're in.</h2>
+      <p class="lead">Thank you. Your app opens on ${CONFIG.accessDate}. Tell me where to send the link, and I'll email you right now so you know it worked.</p></div>
+    <section class="offer">
+      <form id="buyer" novalidate>
+        <input type="email" id="bemail" autocomplete="email" placeholder="your@email.com" required>
+        <div style="height:10px"></div>
+        <button class="btn" type="submit">Send my link here</button>
+        <p class="err" id="berr" hidden></p>
+      </form>
+      <div class="ok" id="bok" hidden>Done. Check your inbox. Nothing there? Look in spam and move it to your inbox, so the 25th lands right.</div>
+      <p class="small" style="color:#55606C">Use the same email you paid with if you can.</p>
+    </section>
+    <div class="dayc"><div class="dch"><span>ONE THING FOR TONIGHT</span><span>15 MIN</span></div><b>Fill three days of water</b><span>One gallon per person per day. Sealed, dark, dated.</span><div class="dcf"><span>INDEPENDENCE</span><span class="up">+3</span></div></div>
+    <footer class="foot"><div>7-day refund from access, for any reason.</div><div>This is preparation, not financial, legal or medical advice.</div></footer>
+  </div>`;
+}
+
+async function submitBuyer(e){
+  e.preventDefault();
+  const email = document.getElementById("bemail").value.trim(), err = document.getElementById("berr");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.textContent = "That email doesn't look right."; err.hidden = false; return; }
+  err.hidden = true;
+  const fd = new FormData();
+  fd.append("EMAIL", email); fd.append("email_address_check", ""); fd.append("locale", "en");
+  try{
+    await fetch(CONFIG.buyerUrl, {method:"POST", body:fd, mode:"no-cors"});
+    track("BuyerEmail");
+    document.getElementById("buyer").hidden = true; document.getElementById("bok").hidden = false;
+  }catch(x){ err.textContent = "Couldn't send. Check your connection and try again."; err.hidden = false; }
+}
+
 function render(){
   renderHud();
   document.body.classList.toggle("home", S.view==="home");
-  app.innerHTML = S.view==="home" ? viewHome() : S.view==="quiz" ? viewQuiz() : S.full ? viewFull() : viewTeaser();
+  app.innerHTML = S.view==="paid" ? viewPaid() : S.view==="home" ? viewHome() : S.view==="quiz" ? viewQuiz() : S.full ? viewFull() : viewTeaser();
   const f = document.getElementById("mail"); if (f) f.addEventListener("submit", submitMail);
+  const bf = document.getElementById("buyer"); if (bf) bf.addEventListener("submit", submitBuyer);
 }
 
 async function submitMail(e){
@@ -540,7 +577,9 @@ document.addEventListener("click", e => {
 
 (function restore(){
   try{
-    const r = new URLSearchParams(location.search).get("r") || "";
+    const qs = new URLSearchParams(location.search);
+    if (qs.has("paid")){ S.view = "paid"; track("Purchase"); return; }
+    const r = qs.get("r") || "";
     if (new RegExp("^[0-3]{" + Q.length + "}$").test(r)){ S.ans = r.split("").map(Number); S.view = "result"; S.full = true; }
   }catch(e){}
 })();
