@@ -3,333 +3,385 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Independence Score · 30 Days Ready</title>
-<meta name="description" content="What if the government froze your life? Check how much of your life keeps working without the system. 3 minutes, 15 questions.">
-<meta property="og:title" content="What's your Independence Score?">
-<meta property="og:description" content="How much of your life keeps working if the system cuts you off? 3 minutes. 15 questions.">
-<meta name="theme-color" content="#0C1015">
+<title>How many days do you have? · 30 Days Ready</title>
+<meta name="description" content="Cash is illegal now. A score decides how you live. Alex has 2 days. How many do you have?">
+<meta property="og:title" content="Alex has 2 days. How many do you have?">
+<meta property="og:description" content="Check your READY. 2 minutes. 12 questions.">
+<meta name="theme-color" content="#141B23">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600;700&display=swap">
 <style>
-/* Dark, cinematic: the cold blue-black of "the system", brand red #EE3B1B for alarm and action, mint (Alex's sheet) for independence. */
+/* The series' world: cold blue-grey city = the system; Alex red = action; warm yellow = READY, the only warm thing on screen.
+   Flat web-comic: thick ink outlines, flat fills, HUD on top like in every episode. */
 :root{
-  --bg:#0C1015; --bg2:#121820; --surface:#161D26; --line:#26303C; --ink:#EEF2F5; --muted:#8D99A6;
-  --red:#EE3B1B; --red-soft:rgba(238,59,27,.14); --mint:#7FD1AE; --mint-soft:rgba(127,209,174,.14); --amber:#F2B04A;
+  --city:#1A222C; --city2:#222C38; --panel:#F4F1E8; --ink:#0B0F14; --cold:#8796A6; --cold2:#B9C4CF;
+  --alex:#EE3B1B; --ready:#F5C033; --ok:#7FD1AE;
   --head:"Oswald","Arial Narrow",Impact,sans-serif;
   --ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --num:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --line:3px;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
-.wrap{max-width:620px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
-h1,h2,h3{font-family:var(--head);font-weight:600;line-height:1.05;margin:0;text-wrap:balance;letter-spacing:.005em}
+html,body{margin:0;background:var(--city);color:#fff;font-family:var(--ui);font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--head);font-weight:700;line-height:1.02;margin:0;text-transform:uppercase;letter-spacing:.01em;text-wrap:balance}
 p{margin:0}
 button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--red);outline-offset:3px}
-.eyebrow{font-family:var(--num);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--red);color:#fff;font-family:var(--head);font-weight:600;font-size:20px;letter-spacing:.04em;text-transform:uppercase;padding:18px 22px;border-radius:14px;text-decoration:none;transition:transform .1s,filter .2s}
-.btn:hover{filter:brightness(1.08)}
-.btn:active{transform:scale(.985)}
-.btn.ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
-.sub{font-size:14px;color:var(--muted);text-align:center}
+:focus-visible{outline:3px solid var(--ready);outline-offset:3px}
 
-/* landing */
-.hero{min-height:88vh;min-height:88svh;display:flex;flex-direction:column;justify-content:center;gap:26px;padding-block:56px 40px;position:relative}
-.hero::before{content:"";position:absolute;inset:0 -50vw;background:radial-gradient(60% 50% at 70% 20%,rgba(238,59,27,.16),transparent 70%);pointer-events:none;z-index:-1}
-.brand{font-family:var(--head);font-size:15px;letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
-.brand i{width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red)}
-.hero h1{font-size:clamp(44px,12vw,72px);text-transform:uppercase}
-.hero h1 em{font-style:normal;color:var(--red)}
-.lede{font-size:19px;color:#C9D2DA;max-width:34ch}
-.facts{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--num);font-size:13px;color:var(--muted)}
-.facts span::before{content:"✓ ";color:var(--mint)}
-section.block{padding-block:44px;border-top:1px solid var(--line);display:grid;gap:22px}
-section.block h2{font-size:34px;text-transform:uppercase}
-.cuts{display:grid;gap:10px;counter-reset:c}
-.cut{display:grid;grid-template-columns:38px 1fr;gap:14px;align-items:start;padding:14px 0;border-bottom:1px solid var(--line)}
-.cut:last-child{border-bottom:0}
-.cut::before{counter-increment:c;content:counter(c,decimal-leading-zero);font-family:var(--num);color:var(--red);font-size:14px;padding-top:3px}
-.cut b{font-family:var(--head);font-weight:600;font-size:20px;text-transform:uppercase;letter-spacing:.02em;display:block}
-.cut span{color:var(--muted);font-size:15px}
-.quote{font-family:var(--head);font-size:26px;line-height:1.2;text-transform:uppercase}
-.quote small{display:block;font-family:var(--ui);text-transform:none;font-size:15px;color:var(--muted);margin-top:10px}
-footer{padding-block:40px 60px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:grid;gap:8px}
+/* HUD, same as the episodes */
+.hud{position:sticky;top:0;z-index:5;background:var(--ink);border-bottom:var(--line) solid #000;padding-top:env(safe-area-inset-top,0px)}
+.hud .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:10px}
+.hud .cell{display:flex;align-items:baseline;gap:8px;font-family:var(--num);font-weight:700;letter-spacing:.08em}
+.hud .k{font-size:12px;color:var(--cold)}
+.hud .v{font-size:22px}
+.hud .score .v{color:var(--cold2)}
+.hud .ready .v{color:var(--ready)}
+.hud .tag{font-family:var(--num);font-size:11px;color:var(--cold);letter-spacing:.14em}
+
+.btn{display:flex;align-items:center;justify-content:center;width:100%;background:var(--alex);color:#fff;font-family:var(--head);font-weight:700;font-size:22px;letter-spacing:.05em;text-transform:uppercase;padding:18px 20px;border:var(--line) solid #000;border-radius:14px;box-shadow:5px 5px 0 #000;text-decoration:none;transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translate(3px,3px);box-shadow:2px 2px 0 #000}
+.small{font-size:14px;color:var(--cold)}
+.center{text-align:center}
+
+/* opening frame */
+.frame{padding-block:28px 34px;display:grid;gap:22px}
+.panel{background:var(--panel);color:var(--ink);border:var(--line) solid #000;border-radius:18px;box-shadow:6px 6px 0 #000;overflow:hidden}
+.scene{position:relative;background:linear-gradient(180deg,#2B3745 0%,#1E2833 100%);border-bottom:var(--line) solid #000;height:230px;display:flex;align-items:flex-end;justify-content:center}
+.scene .sky{position:absolute;inset:0;background:
+  linear-gradient(transparent 62%,rgba(0,0,0,.25) 62%),
+  repeating-linear-gradient(90deg,transparent 0 46px,rgba(255,255,255,.04) 46px 48px)}
+.scene .bldg{position:absolute;bottom:0;background:#121921;border:var(--line) solid #000;border-bottom:0}
+.scene .stamp{position:absolute;top:14px;left:14px;font-family:var(--num);font-weight:700;font-size:12px;letter-spacing:.12em;color:var(--alex);border:2px solid var(--alex);padding:3px 8px;transform:rotate(-4deg);background:rgba(11,15,20,.6)}
+.scene svg{position:relative;width:150px;height:auto;margin-bottom:-2px}
+.caption{padding:18px 18px 20px;display:grid;gap:10px}
+.caption .line{font-family:var(--head);font-weight:700;font-size:30px;line-height:1.05;text-transform:uppercase}
+.caption .line em{font-style:normal;color:var(--alex)}
+.caption .sub{font-size:17px;color:#2A3440}
+.facts{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;font-family:var(--num);font-size:12px;letter-spacing:.08em;color:var(--cold)}
+
+.rules{display:grid;gap:12px;padding-block:8px 32px}
+.rule{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;font-size:16px;color:var(--cold2)}
+.rule b{font-family:var(--num);color:#fff;background:var(--ink);border:2px solid #000;border-radius:8px;padding:4px 8px;font-size:13px;white-space:nowrap}
+.rule.red b{color:var(--alex)}
+.foot{padding-block:28px 50px;border-top:2px solid #0E141A;font-size:13px;color:var(--cold);display:grid;gap:6px;text-align:center}
 
 /* quiz */
-.quiz{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;gap:26px;padding-block:24px 40px}
-.qtop{display:flex;align-items:center;gap:14px}
-.qtop button{font-family:var(--num);color:var(--muted);font-size:18px;padding:6px}
-.bar{flex:1;height:4px;border-radius:4px;background:var(--line);overflow:hidden}
-.bar div{height:100%;background:var(--red);transition:width .35s}
-.qtop .n{font-family:var(--num);font-size:13px;color:var(--muted)}
-.qcut{font-family:var(--num);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
-.scene{font-family:var(--head);font-size:clamp(30px,8vw,40px);line-height:1.1;text-transform:none}
+.quiz{min-height:calc(100svh - 52px);display:flex;flex-direction:column;gap:20px;padding-block:22px 40px}
+.qtop{display:flex;gap:12px;align-items:center;font-family:var(--num);font-size:13px;color:var(--cold)}
+.qtop button{font-size:20px;color:var(--cold);padding:4px 6px}
+.bar{flex:1;height:8px;border:2px solid #000;border-radius:6px;background:var(--ink);overflow:hidden}
+.bar div{height:100%;background:var(--ready);transition:width .3s}
+.qcard{background:var(--panel);color:var(--ink);border:var(--line) solid #000;border-radius:18px;box-shadow:6px 6px 0 #000;padding:20px 18px;display:grid;gap:8px}
+.qcard .day{font-family:var(--num);font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--alex);text-transform:uppercase}
+.qcard h2{font-size:32px}
+.qcard p{color:#2A3440;font-size:16px}
 .opts{display:grid;gap:10px}
-.opt{text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;padding:16px 18px;font-size:17px;transition:border-color .15s,background .15s}
-.opt:hover{border-color:#4A5869}
-.opt.sel{border-color:var(--red);background:var(--red-soft)}
+.opt{text-align:left;background:var(--city2);border:2px solid #0B0F14;border-radius:12px;padding:15px 16px;font-size:17px;color:#fff;transition:background .12s,border-color .12s}
+.opt:hover{border-color:var(--cold)}
+.opt.sel{background:var(--alex);border-color:#000}
 
-/* result */
-.result{padding-block:28px 60px;display:grid;gap:28px}
-.score{display:grid;gap:10px;justify-items:center;text-align:center;padding:30px 20px;border-radius:22px;background:var(--surface);border:1px solid var(--line)}
-.score .big{font-family:var(--num);font-weight:600;font-size:96px;line-height:1;letter-spacing:-.04em}
-.score .big small{font-size:28px;color:var(--muted);letter-spacing:0}
-.score h1{font-size:36px;text-transform:uppercase}
-.score p{color:#C9D2DA;max-width:36ch}
-.meter{width:100%;height:10px;border-radius:10px;background:var(--line);overflow:hidden;margin-top:6px}
-.meter div{height:100%;border-radius:10px}
-.cutrows{display:grid;gap:14px}
-.crow{display:grid;gap:8px;padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line)}
-.crow .top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-.crow b{font-family:var(--head);font-weight:600;font-size:20px;text-transform:uppercase;letter-spacing:.02em}
-.crow .pct{font-family:var(--num);font-weight:600}
-.crow .meter{height:6px;margin:0}
-.crow p{font-size:15px;color:#C9D2DA}
-.weak{border-color:var(--red)}
-.weak .tag{font-family:var(--num);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
-.card{display:grid;gap:16px;padding:22px;border-radius:20px;border:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),var(--surface))}
-.card h2{font-size:30px;text-transform:uppercase}
-.card ul{margin:0;padding-left:20px;display:grid;gap:8px;color:#C9D2DA}
+/* result teaser + full report */
+.result{padding-block:24px 50px;display:grid;gap:22px}
+.vs{display:grid;grid-template-columns:1fr 1fr;border:var(--line) solid #000;border-radius:18px;overflow:hidden;box-shadow:6px 6px 0 #000}
+.vs > div{padding:18px 14px;display:grid;gap:4px;justify-items:center;text-align:center}
+.vs .you{background:var(--panel);color:var(--ink);border-right:var(--line) solid #000}
+.vs .alex{background:var(--ink)}
+.vs .who{font-family:var(--num);font-size:12px;letter-spacing:.14em;font-weight:700}
+.vs .you .who{color:#55606C}
+.vs .alex .who{color:var(--alex)}
+.vs .d{font-family:var(--num);font-weight:700;font-size:64px;line-height:1}
+.vs .you .d{color:var(--ink)}
+.vs .alex .d{color:var(--ready)}
+.vs .u{font-family:var(--num);font-size:13px;letter-spacing:.1em}
+.verdict{font-family:var(--head);font-size:30px;text-transform:uppercase;line-height:1.05;text-align:center}
+.verdict em{font-style:normal;color:var(--alex)}
+.scorebox{display:flex;gap:14px;align-items:center;background:var(--ink);border:2px solid #000;border-radius:14px;padding:14px 16px}
+.scorebox .n{font-family:var(--num);font-weight:700;font-size:34px;color:var(--cold2)}
+.scorebox p{font-size:15px;color:var(--cold2)}
+.layers{display:grid;gap:10px}
+.layer{display:grid;grid-template-columns:76px 1fr 64px;gap:10px;align-items:center;font-family:var(--num);font-size:13px;font-weight:700;letter-spacing:.06em}
+.track{height:12px;border:2px solid #000;border-radius:6px;background:var(--ink);overflow:hidden}
+.fill{height:100%}
+.layer .dd{text-align:right}
+.locked{position:relative;border:var(--line) solid #000;border-radius:18px;background:var(--panel);color:var(--ink);box-shadow:6px 6px 0 #000;overflow:hidden;min-height:380px}
+.locked .peek{padding:18px;display:grid;gap:10px;filter:blur(4px);opacity:.55;user-select:none;pointer-events:none}
+.locked .peek div{font-family:var(--num);font-size:14px}
+.locked .gate{position:absolute;inset:0;display:grid;align-content:center;gap:12px;padding:18px;background:linear-gradient(180deg,rgba(244,241,232,.2),rgba(244,241,232,.96) 35%)}
+.locked h3{font-size:26px}
+.locked ul{margin:0;padding-left:18px;font-size:15px;color:#2A3440}
+input[type=email]{width:100%;font:inherit;font-size:17px;color:var(--ink);background:#fff;border:var(--line) solid #000;border-radius:12px;padding:15px 16px}
+.ok{background:var(--ink);color:var(--ok);border-radius:12px;padding:14px;font-weight:600}
+.err{color:var(--alex);font-size:14px;font-weight:600}
+.offer{background:var(--panel);color:var(--ink);border:var(--line) solid #000;border-radius:18px;box-shadow:6px 6px 0 #000;padding:20px 18px;display:grid;gap:14px}
+.offer h2{font-size:34px}
+.offer ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.offer li{display:grid;grid-template-columns:22px 1fr;gap:8px;font-size:16px}
+.offer li::before{content:"■";color:var(--alex);font-size:12px;padding-top:4px}
 .price{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-.price b{font-family:var(--num);font-size:44px;font-weight:600}
-.price s{font-family:var(--num);color:var(--muted);font-size:20px}
-.price span{font-size:14px;color:var(--amber)}
-form{display:grid;gap:10px}
-input[type=email]{width:100%;font:inherit;font-size:17px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:14px;padding:16px 18px}
-input[type=email]:focus{border-color:var(--red);outline:none}
-.ok{padding:16px;border-radius:14px;background:var(--mint-soft);color:var(--mint);font-weight:500}
-.err{color:var(--red);font-size:14px}
-.retake{justify-self:center;color:var(--muted);font-size:14px;text-decoration:underline;text-underline-offset:3px}
+.price b{font-family:var(--num);font-size:46px}
+.price s{font-family:var(--num);font-size:20px;color:#6B7580}
+.price span{font-family:var(--num);font-size:12px;font-weight:700;letter-spacing:.08em;background:var(--ready);border:2px solid #000;border-radius:6px;padding:2px 8px}
+.timeline{display:grid;border:var(--line) solid #000;border-radius:18px;overflow:hidden;box-shadow:6px 6px 0 #000}
+.tl{display:grid;grid-template-columns:86px 1fr;border-bottom:2px solid #000}
+.tl:last-child{border-bottom:0}
+.tl .when{background:var(--ink);font-family:var(--num);font-weight:700;font-size:14px;padding:14px 10px;color:var(--alex);display:flex;align-items:center}
+.tl .what{background:var(--panel);color:var(--ink);padding:14px;font-weight:600}
+.tl.goal .when{color:var(--ready)}
+.moves{display:grid;gap:10px}
+.move{display:grid;grid-template-columns:56px 1fr;gap:12px;background:var(--panel);color:var(--ink);border:2px solid #000;border-radius:14px;padding:14px;align-items:start}
+.move .dn{font-family:var(--num);font-weight:700;font-size:13px;background:var(--ink);color:var(--ready);border-radius:8px;text-align:center;padding:6px 0}
+.move b{font-family:var(--head);text-transform:uppercase;font-size:19px;display:block;line-height:1.1}
+.move span{font-size:15px;color:#2A3440}
+.sec{display:grid;gap:12px}
+.sec .k{font-family:var(--num);font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--cold)}
+.retake{justify-self:center;color:var(--cold);font-size:14px;text-decoration:underline;text-underline-offset:3px}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
+<div class="hud" id="hud"></div>
 <main id="app"></main>
 
 <script>
-/* ================== CONFIG: fill these in ================== */
+/* ===== CONFIG ===== */
 const CONFIG = {
-  checkoutUrl: "https://commas.com/checkout/DDRZxndcYL2ZbKT",  // Commas checkout, early access $39
-  leadUrl: "https://c59323b9.sibforms.com/serve/MUIFALNpbgoNP8XOQxofXDSQ6Kj8igvaVDUZ7BI8tYY1VJY-vmoEpaGovlsLsk2cqqQyh2OhV8IXmtKBGnELA3Jzc8BeU1PA8xa_yc9Oy9AH6rhdPYvB0TrYjMv-p2WB3H9A5XnjwBRurZwKoV8pPLn1KSGxFRygcZvNIo1151o_GoQDwDA2VXpn-gQNLuASIjZgRQNMZ1D-1k2xnw==",  // Brevo form (list: Independence Score)
-  priceNow: 39, priceLater: 59, priceDate: "October 25",
-  accessDate: "October 25"
+  checkoutUrl: "https://commas.com/checkout/DDRZxndcYL2ZbKT",
+  leadUrl: "https://c59323b9.sibforms.com/serve/MUIFALNpbgoNP8XOQxofXDSQ6Kj8igvaVDUZ7BI8tYY1VJY-vmoEpaGovlsLsk2cqqQyh2OhV8IXmtKBGnELA3Jzc8BeU1PA8xa_yc9Oy9AH6rhdPYvB0TrYjMv-p2WB3H9A5XnjwBRurZwKoV8pPLn1KSGxFRygcZvNIo1151o_GoQDwDA2VXpn-gQNLuASIjZgRQNMZ1D-1k2xnw==",
+  priceNow: 39, priceLater: 59, priceDate: "October 25", accessDate: "October 25",
+  alexDays: 2
 };
-/* =========================================================== */
 
-const CUTS = {
-  water:  {name:"Water",      line:"Rainwater you can drink, and enough stored to never wait for the tap."},
-  food:   {name:"Food",       line:"Grow part of what you eat and keep a pantry the store can't take away."},
-  energy: {name:"Energy",     line:"Light, power and a hot meal when the grid goes down."},
-  signal: {name:"Connection", line:"Reach your people and find your way when the internet and networks are off."},
-  money:  {name:"Money",      line:"Crypto you hold yourself, cash, and accounts no single button can freeze."},
-  papers: {name:"Exit",       line:"Documents ready and a plan B country if staying stops being an option."},
-  people: {name:"People",     line:"A local circle to trade with, and skills worth more than money."}
-};
-const ORDER = ["water","food","energy","signal","money","papers","people"];
-
+/* ===== The check: 12 scenes. Core layers set READY days. ===== */
 const Q = [
- {cut:"water", q:"Tap water stops for a week. What do you drink?", a:["Nothing. We'd have to buy it","A few bottles, a couple of days","Several gallons for each of us","Stored water, plus a filter to make more"]},
- {cut:"water", q:"Could you turn rainwater into drinking water today?", a:["I wouldn't know where to start","I know it's possible, never tried","I can collect it, not sure about cleaning it","Yes. I collect it and I have a way to purify it"]},
- {cut:"food",  q:"Stores close tonight. How long could your home eat?", a:["A day or two","About three days","About a week","Two weeks or more"]},
- {cut:"food",  q:"Do you grow anything you actually eat?", a:["Nothing","A few herbs","Some vegetables in season","A real part of what we eat"]},
- {cut:"energy",q:"The power is out for three days. What still works?", a:["Nothing. My phone dies on day one","Some flashlights","Power banks and lanterns","Solar or backup power for the essentials"]},
- {cut:"energy",q:"Could you cook a hot meal with no electricity and no gas line?", a:["No","Maybe on a grill outside","Yes, a camp stove with spare fuel","Yes, and more than one way"]},
- {cut:"signal",q:"Internet and cell networks go down. How do you reach your family?", a:["I couldn't","We'd figure it out somehow","We agreed on a meeting place","We have radios, mesh or satellite messaging"]},
- {cut:"signal",q:"Are your maps and important contacts available offline?", a:["Everything lives in the cloud","A few screenshots","Offline maps on my phone","Offline maps plus a paper copy"]},
- {cut:"money", q:"Your bank app froze tonight. How do you buy food tomorrow?", a:["I couldn't","I'd ask family or friends","A card from another bank","Cash at home, and another way to pay"]},
- {cut:"money", q:"How many truly separate places does your money live in?", a:["One bank","Two banks in the same country","Banks and some cash at home","Banks, cash, and something I hold myself"]},
- {cut:"money", q:"If one platform froze you tomorrow, how much would you lose access to?", a:["Almost everything","Most of it","About half","A small part"]},
- {cut:"papers",q:"You have 15 minutes to leave home. Where are your documents?", a:["Somewhere. I'd have to search","I know where they are","In one folder, ready to grab","Folder, digital copies and a packed bag"]},
- {cut:"papers",q:"If you had to live in another country next year, could you?", a:["No idea how","Maybe one day","I know where I'd go and how","I already have the documents or residency"]},
- {cut:"people",q:"Who near you could you trade or share with in a crisis?", a:["Nobody, honestly","Maybe one person","A few neighbors","A real local circle"]},
- {cut:"people",q:"If money stopped working, what could you trade?", a:["Nothing I can think of","I'm not sure","One useful skill","Several: repair, food, medical, tech"]}
+ {id:"people", tag:"Your home", q:"How many people do you feed?", hint:"Your plan is sized for them.", a:[["Just me",1],["Two of us",2],["Three or four",4],["Five or more",5]]},
+ {id:"climate", tag:"Your weather", q:"What hits your city?", hint:"Power and water fail differently in each.", a:[["Cold winters","cold"],["Hot summers","hot"],["Storms and floods","storm"],["Mostly mild","mild"]]},
+ {id:"money", tag:"Midnight", q:"Your card is frozen. Groceries tomorrow?", hint:"It happened in Canada in 2022. No court order.", a:[["I couldn't buy anything",1],["I'd ask someone for help",3],["A card from another bank",4],["Cash at home",7]]},
+ {id:"water", tag:"Day 1", q:"The tap stops. What do you drink?", a:[["Nothing. I'd have to buy it",1],["A few bottles",2],["A few gallons each",5],["Two weeks stored, plus a filter",14]]},
+ {id:"power", tag:"Day 1", q:"The grid goes down. What still works?", a:[["Nothing. My phone dies tonight",1],["A couple of flashlights",2],["Power banks and lanterns",4],["Solar or a generator",10]]},
+ {id:"food", tag:"Day 2", q:"Stores close. How long can your kitchen feed you?", a:[["A day or two",1],["About three days",3],["About a week",7],["Two weeks or more",14]]},
+ {id:"cook", tag:"Day 2", q:"No gas. No power. Can you cook?", a:[["No",0],["Maybe on a grill outside",1],["A camp stove with fuel",2],["More than one way",3]]},
+ {id:"banks", tag:"Day 3", q:"Where does your money live?", a:[["One bank app",0],["Two banks",1],["Banks and some cash",2],["Banks, cash, and something I hold myself",3]]},
+ {id:"signal", tag:"Day 3", q:"Network's down. Can you reach your family?", a:[["No",0],["We'd figure it out",1],["We have a meeting place",2],["Radios or satellite",3]]},
+ {id:"grow", tag:"Day 5", q:"Do you grow anything you eat?", a:[["Nothing",0],["A few herbs",1],["Some vegetables",2],["A real part of our food",3]]},
+ {id:"docs", tag:"Day 7", q:"You have 15 minutes to leave. Your passports?", a:[["Somewhere",0],["I know where",1],["In one folder",2],["Folder, copies and a packed bag",3]]},
+ {id:"near", tag:"Day 10", q:"Who near you would help?", a:[["Nobody",0],["Maybe one person",1],["A few neighbors",2],["A real circle",3]]}
 ];
+const CORE = ["food","water","power","money"];
+const NAME = {food:"Food", water:"Water", power:"Power", money:"Money"};
+const BREAKS = {power:"Your phone dies. The lights are out.", water:"Clean water runs out.", money:"You can't pay for anything.", food:"The kitchen is empty."};
 
-const INSIGHT = {
- water:["Water is the first thing that runs out, and right now you depend on the tap completely. One rain barrel and a proper filter change that.","You have a start, but not a source. Stored water ends. A way to catch and purify rain doesn't.","You're close. The step left is turning water you collect into water you'd give your kids without thinking."],
- food:["If the shelves empty, your home has days, not weeks. A real pantry and your first crops are the fastest win on this list.","You'd get through a short shock. Growing even a small part of what you eat is what makes it last.","Strong. Next is preserving what you grow so a bad month doesn't cost you."],
- energy:["When the grid goes, your home goes dark and your phone dies with it. Light, charging and one way to cook are cheap to fix.","You'd have light for a while. You don't yet have a way to make your own power.","You can ride out outages. A small solar setup turns that into real independence."],
- signal:["Right now everything you know lives on a network someone else controls. If it switches off, so does your plan.","You'd find your people eventually. Offline tools and a meeting plan make it certain.","Good. A radio or off-grid messaging closes the last gap."],
- money:["One bank, one app, one button. If it's pressed, you lose access to almost everything you have.","Your money is in fewer places than it looks. Spreading it out is the most important move on this list.","You're ahead of most people. Holding part of it yourself makes it untouchable."],
- papers:["If you had to leave fast, you'd lose time you don't have. A ready folder takes one evening.","You know where things are, which isn't the same as being ready to go.","Your exit is mostly solved. Keep copies current and the plan B real."],
- people:["You'd be on your own. In every real crisis, the people next door help first.","There's someone, but not yet a circle you can count on.","You have people. That's worth more than any gear on this list."]
-};
-
-const TIERS = [
- {max:24, name:"Fully plugged in", color:"var(--red)",  text:"One switch could turn off most of your life. Food, water, money and contact all run through systems you don't control."},
- {max:49, name:"Plugged in",       color:"var(--amber)",text:"You'd get through a short shock. A longer one, or a frozen account, would leave you depending on someone else's decision."},
- {max:74, name:"Half out",         color:"var(--amber)",text:"You've started cutting yourself out. A few weak spots still let the system reach you."},
- {max:100,name:"Independent",      color:"var(--mint)", text:"Most of your life keeps working without the system. Now it's about depth and keeping it current."}
-];
-
-const S = {view:"home", i:0, ans:[]};
-const app = document.getElementById("app");
+const S = {view:"home", i:0, ans:[], full:false};
+const app = document.getElementById("app"), hud = document.getElementById("hud");
 const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const track = (name, data) => { try{ if(window.fbq) fbq("trackCustom", name, data||{}); }catch(e){} };
+const track = (n,d) => { try{ if(window.fbq) fbq("trackCustom", n, d||{}); }catch(e){} };
+const val = id => { const k = Q.findIndex(q => q.id===id); const a = S.ans[k]; return a==null ? null : Q[k].a[a][1]; };
 
-function scores(){
-  const per = {}; ORDER.forEach(k => per[k] = {sum:0, n:0});
-  Q.forEach((q, i) => { per[q.cut].sum += (S.ans[i] ?? 0); per[q.cut].n += 3; });
-  const out = {}; ORDER.forEach(k => out[k] = Math.round(per[k].sum / per[k].n * 100));
-  const total = Math.round(ORDER.reduce((s,k) => s + out[k], 0) / ORDER.length);
-  const weakest = ORDER.slice().sort((a,b) => out[a] - out[b])[0];
-  return {per:out, total, weakest, tier: TIERS.find(t => total <= t.max)};
+function calc(){
+  const days = {}; CORE.forEach(k => days[k] = val(k) ?? 0);
+  const ready = Math.min(...CORE.map(k => days[k]));
+  const prep = Q.filter(q => q.id!=="people" && q.id!=="climate").map(q => (S.ans[Q.indexOf(q)] ?? 0) / 3);
+  const indep = prep.reduce((s,x)=>s+x,0) / prep.length;
+  const score = Math.round(97 - indep * 70);
+  const order = CORE.slice().sort((a,b) => days[a]-days[b]);
+  return {days, ready, score, order, n: val("people") || 1};
 }
 
-function priceBlock(){
-  return `<div class="price"><b>$${CONFIG.priceNow}</b><s>$${CONFIG.priceLater}</s><span>Early access price until ${CONFIG.priceDate}</span></div>`;
+/* first 7 moves, weakest first */
+function moves(r){
+  const n = r.n, out = [];
+  const lib = {
+    water:{t:"Store "+(3*n)+" gallons of water", d:"One gallon per person per day. Three days. Sealed, dark, dated."},
+    power:{t:"Light and a charged phone", d:"One headlamp each. One power bank that charges a phone three times."},
+    money:{t:"Cash in an envelope", d:"Three days of food and gas. Small bills. A place only adults know."},
+    food:{t:"Three days you can eat cold", d:"Food your family already likes. One shelf. Date on every box."},
+    cook:{t:"A way to cook", d:"A camp stove and four fuel cans. Outside only. Never indoors."},
+    banks:{t:"A second way to pay", d:"A card from a second, unrelated bank. Keep it active."},
+    signal:{t:"Numbers on paper", d:"Five numbers in every wallet. One meeting place everyone knows."},
+    grow:{t:"Sprouts in a jar", d:"Lentils or mung beans. Rinse twice a day. Food in four days."},
+    docs:{t:"One folder", d:"Copies of passports, IDs and insurance. One on paper, one in a secure cloud."},
+    near:{t:"Meet one neighbor", d:"Say hi. Swap numbers. Ask what they'd need."}
+  };
+  const extra = ["cook","banks","signal","docs","grow","near"];
+  r.order.forEach(k => { if (r.days[k] < 30) out.push(lib[k]); });
+  extra.forEach(id => { if ((S.ans[Q.findIndex(q=>q.id===id)] ?? 0) <= 1) out.push(lib[id]); });
+  extra.forEach(id => { if (!out.includes(lib[id])) out.push(lib[id]); });
+  return out.slice(0,7);
 }
-function buyHref(){ return CONFIG.checkoutUrl || "#early-access"; }
+
+function renderHud(){
+  let score = 100, ready;
+  if (S.view === "home") ready = CONFIG.alexDays;
+  else { const answered = CORE.filter(k => val(k)!=null);
+    score = S.ans.length > 2 ? calc().score : 100;
+    ready = answered.length ? Math.min(...answered.map(k => val(k))) : "?"; }
+  hud.innerHTML = `<div class="wrap">
+    <div class="cell score"><span class="k">SCORE</span><span class="v">${score}</span></div>
+    <span class="tag">${S.view==="home" ? "ALEX · DAY 1" : "YOU"}</span>
+    <div class="cell ready"><span class="k">READY</span><span class="v">${ready}${ready==="?"?"":"d"}</span></div></div>`;
+}
+
+const ALEX_SVG = `<svg viewBox="0 0 160 200" aria-label="Alex" role="img">
+  <path d="M30 200 C30 140 48 116 80 116 C112 116 130 140 130 200 Z" fill="#EE3B1B" stroke="#000" stroke-width="5"/>
+  <path d="M56 126 C62 150 98 150 104 126" fill="none" stroke="#000" stroke-width="4"/>
+  <line x1="70" y1="150" x2="68" y2="172" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <line x1="90" y1="150" x2="92" y2="172" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="80" cy="74" r="44" fill="#fff" stroke="#000" stroke-width="5"/>
+  <path d="M60 62 q7 -6 14 -2" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+  <path d="M86 60 q7 -4 14 2" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="67" cy="74" r="5" fill="#000"/><circle cx="93" cy="74" r="5" fill="#000"/>
+  <path d="M70 96 h20" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+</svg>`;
 
 function viewHome(){
   return `<div class="wrap">
-  <header class="hero">
-    <div class="brand"><i></i>30 Days Ready</div>
-    <h1>What if the government <em>froze</em> your life?</h1>
-    <p class="lede">Your money, your food, your water, your phone. How much of it would still work tomorrow? Find out in three minutes.</p>
-    <button class="btn" data-go="quiz">Check my Independence Score</button>
-    <div class="facts"><span>15 questions</span><span>3 minutes</span><span>No money amounts or addresses</span></div>
-  </header>
-
-  <section class="block">
-    <div class="eyebrow">What the score measures</div>
-    <h2>Seven ways the system holds you</h2>
-    <div class="cuts">${ORDER.map(k => `<div class="cut"><div><b>${CUTS[k].name}</b><span>${CUTS[k].line}</span></div></div>`).join("")}</div>
+  <section class="frame">
+    <div class="panel">
+      <div class="scene"><div class="sky"></div>
+        <div class="bldg" style="left:6%;width:22%;height:62%"></div>
+        <div class="bldg" style="right:4%;width:26%;height:74%"></div>
+        <div class="stamp">ACCOUNT FROZEN</div>
+        ${ALEX_SVG}</div>
+      <div class="caption">
+        <p class="line">Cash is illegal now.<br>A score decides <em>how you live.</em></p>
+        <p class="sub">This is Alex. He has 2 days. How many do you have?</p>
+      </div>
+    </div>
+    <button class="btn" data-go="quiz">Check my READY</button>
+    <div class="facts"><span>12 QUESTIONS</span><span>2 MINUTES</span><span>NO ADDRESSES. NO AMOUNTS.</span></div>
   </section>
-
-  <section class="block">
-    <p class="quote">Cut yourself out of the system. One piece at a time.<small>That's what Alex is doing in the series. Your score shows where you'd start.</small></p>
-    <button class="btn" data-go="quiz">Get my score</button>
+  <section class="rules">
+    <div class="rule red"><b>SCORE 100</b><span>The system's grade. It drops every time you prepare.</span></div>
+    <div class="rule"><b style="color:var(--ready)">READY 2d</b><span>How long you'd last without the system. Alex is going for 30.</span></div>
   </section>
-
-  <section class="block" id="early-access">
-    <div class="eyebrow">Coming ${CONFIG.accessDate}</div>
-    <h2>The 30 Days Ready app</h2>
-    <p style="color:#C9D2DA">An AI guide on your phone that builds your path out of the system, for your home, your family and your climate. Step by step, one cut at a time.</p>
-    ${priceBlock()}
-    <a class="btn" href="${buyHref()}" ${CONFIG.checkoutUrl?'target="_blank" rel="noopener"':''} data-buy="landing">Get early access</a>
-    <p class="sub">Access arrives by email on ${CONFIG.accessDate}.</p>
-  </section>
-
-  <footer><div>30 Days Ready · @30daysready</div><div>The story is fiction. The risk is real. This is preparation, not financial, legal or medical advice.</div></footer>
+  <footer class="foot"><div>@30daysready</div><div>The story is fiction. The risk is real.</div></footer>
   </div>`;
 }
 
 function viewQuiz(){
   const q = Q[S.i];
   return `<div class="wrap quiz">
-    <div class="qtop"><button data-back aria-label="Back">←</button><div class="bar"><div style="width:${(S.i)/Q.length*100}%"></div></div><span class="n">${S.i+1}/${Q.length}</span></div>
-    <div class="qcut">${CUTS[q.cut].name}</div>
-    <h2 class="scene">${esc(q.q)}</h2>
-    <div class="opts">${q.a.map((t,j) => `<button class="opt ${S.ans[S.i]===j?"sel":""}" data-ans="${j}">${esc(t)}</button>`).join("")}</div>
+    <div class="qtop"><button data-back aria-label="Back">←</button><div class="bar"><div style="width:${S.i/Q.length*100}%"></div></div><span>${S.i+1}/${Q.length}</span></div>
+    <div class="qcard"><div class="day">${esc(q.tag)}</div><h2>${esc(q.q)}</h2>${q.hint?`<p>${esc(q.hint)}</p>`:""}</div>
+    <div class="opts">${q.a.map((o,j)=>`<button class="opt ${S.ans[S.i]===j?"sel":""}" data-ans="${j}">${esc(o[0])}</button>`).join("")}</div>
   </div>`;
 }
 
-function viewResult(){
-  const r = scores(); const w = r.weakest;
+function verdict(r){
+  if (r.ready < CONFIG.alexDays) return `You're behind Alex.<br><em>He's only on day 1.</em>`;
+  if (r.ready === CONFIG.alexDays) return `You're exactly where<br><em>Alex started.</em>`;
+  if (r.ready < 14) return `You're ahead of Alex.<br><em>For now.</em>`;
+  return `You're further than most.<br><em>Not at 30 yet.</em>`;
+}
+function layerBars(r){
+  return `<div class="layers">${CORE.map(k=>{const d=r.days[k], c=d<=3?"var(--alex)":d<14?"var(--ready)":"var(--ok)";
+    return `<div class="layer"><span>${NAME[k].toUpperCase()}</span><div class="track"><div class="fill" style="width:${Math.max(4,Math.min(100,d/30*100))}%;background:${c}"></div></div><span class="dd" style="color:${c}">${d}d</span></div>`}).join("")}</div>`;
+}
+function offer(where){
+  return `<section class="offer">
+    <div class="small" style="color:#55606C;font-family:var(--num);font-weight:700;letter-spacing:.12em">EARLY ACCESS · OPENS ${CONFIG.accessDate.toUpperCase()}</div>
+    <h2>Build your own 30 days</h2>
+    <p>Alex is building his 30, one step a day. You get the same path, built for your home.</p>
+    <ul>
+      <li>One step a day. 10 to 20 minutes.</li>
+      <li>Shopping lists for your household, week by week.</li>
+      <li>Water. Food. Power. Money. Papers. People.</li>
+      <li>Your READY goes up with every step.</li>
+      <li>A paper copy for when the phone dies.</li>
+    </ul>
+    <div class="price"><b>$${CONFIG.priceNow}</b><s>$${CONFIG.priceLater}</s><span>UNTIL ${CONFIG.priceDate.toUpperCase()}</span></div>
+    <a class="btn" href="${CONFIG.checkoutUrl}" target="_blank" rel="noopener" data-buy="${where}">Start my 30 days</a>
+    <p class="small center" style="color:#55606C">One payment. Access by email on ${CONFIG.accessDate}.</p>
+  </section>`;
+}
+
+function viewTeaser(){
+  const r = calc();
   return `<div class="wrap result">
-    <div class="eyebrow" style="text-align:center">Your Independence Score</div>
-    <section class="score">
-      <div class="big">${r.total}<small>/100</small></div>
-      <h1 style="color:${r.tier.color}">${r.tier.name}</h1>
-      <div class="meter"><div style="width:${Math.max(3,r.total)}%;background:${r.tier.color}"></div></div>
-      <p>${r.tier.text}</p>
+    <div class="vs"><div class="you"><span class="who">YOU</span><span class="d">${r.ready}</span><span class="u">DAYS</span></div>
+      <div class="alex"><span class="who">ALEX</span><span class="d">${CONFIG.alexDays}</span><span class="u">DAYS</span></div></div>
+    <p class="verdict">${verdict(r)}</p>
+    <div class="scorebox"><span class="n">${r.score}</span><p>Your SCORE. The system trusts you. That's how much it owns.</p></div>
+    ${layerBars(r)}
+    <section class="locked" id="report">
+      <div class="peek"><div>DAY ${r.days[r.order[0]]}: ${esc(BREAKS[r.order[0]])}</div><div>DAY ${r.days[r.order[1]]}: ████████ ████</div><div>MOVE 1: ████ ████████ ██</div><div>MOVE 2: ███████ ████ ██████</div><div>MOVE 3: ████ ██████</div></div>
+      <div class="gate">
+        <h3>Your full report</h3>
+        <ul><li>What breaks first, day by day</li><li>Your first 7 moves, sized for your home</li><li>Where the system holds you hardest</li></ul>
+        <form id="mail" novalidate>
+          <input type="email" id="email" autocomplete="email" placeholder="your@email.com" required>
+          <div style="height:10px"></div>
+          <button class="btn" type="submit">Send it to me</button>
+          <p class="err" id="mailerr" hidden></p>
+        </form>
+        <div class="ok" id="mailok" hidden>Sent. Alex just emailed you. Check your inbox.</div>
+      </div>
     </section>
-
-    <section class="cutrows">
-      ${ORDER.slice().sort((a,b)=>r.per[a]-r.per[b]).map(k => {
-        const p = r.per[k], lvl = p < 34 ? 0 : p < 67 ? 1 : 2;
-        const col = lvl===0 ? "var(--red)" : lvl===1 ? "var(--amber)" : "var(--mint)";
-        return `<div class="crow ${k===w?"weak":""}">
-          ${k===w?`<div class="tag">Your weakest point</div>`:""}
-          <div class="top"><b>${CUTS[k].name}</b><span class="pct" style="color:${col}">${p}%</span></div>
-          <div class="meter"><div style="width:${Math.max(3,p)}%;background:${col}"></div></div>
-          <p>${INSIGHT[k][lvl]}</p>
-        </div>`;}).join("")}
-    </section>
-
-    <section class="card" id="report" ${S.fromEmail?"hidden":""}>
-      <div class="eyebrow">Free</div>
-      <h2>Get your full report</h2>
-      <p style="color:#C9D2DA">Your score, your seven cuts, and the first step for your weakest point, ${CUTS[w].name.toLowerCase()}, sent to your inbox.</p>
-      <form id="mail" novalidate>
-        <input type="email" id="email" name="EMAIL" autocomplete="email" placeholder="your@email.com" required>
-        <button class="btn" type="submit">Send my report</button>
-        <p class="err" id="mailerr" hidden></p>
-      </form>
-      <div class="ok" id="mailok" hidden>Sent. Check your inbox in a minute, and your spam folder just in case.</div>
-    </section>
-
-    <section class="card">
-      <div class="eyebrow">Early access · opens ${CONFIG.accessDate}</div>
-      <h2>Get out, one cut at a time</h2>
-      <p style="color:#C9D2DA">The 30 Days Ready app turns this score into your own path out of the system. An AI guide that knows your home, family and climate, and walks you through every cut:</p>
-      <ul>
-        <li>Rainwater to drinking water, sized for your roof or balcony</li>
-        <li>Growing your own food, from a kitchen jar to a real garden</li>
-        <li>Power and a hot meal without the grid</li>
-        <li>Staying in touch when the internet and networks go down</li>
-        <li>Money no single button can freeze, including crypto you hold yourself</li>
-        <li>Documents ready and a plan B country</li>
-        <li>Your local circle and skills worth trading</li>
-      </ul>
-      ${priceBlock()}
-      <a class="btn" href="${buyHref()}" ${CONFIG.checkoutUrl?'target="_blank" rel="noopener"':''} data-buy="result">Get early access for $${CONFIG.priceNow}</a>
-      <p class="sub">One payment. Access arrives by email on ${CONFIG.accessDate}. After that the price is $${CONFIG.priceLater}.</p>
-    </section>
-
+    ${offer("teaser")}
     <button class="retake" data-go="quiz">Retake the check</button>
   </div>`;
 }
 
+function viewFull(){
+  const r = calc(); const mv = moves(r);
+  const tl = r.order.filter(k => r.days[k] < 30).map(k => `<div class="tl"><div class="when">DAY ${r.days[k]}</div><div class="what">${esc(BREAKS[k])}</div></div>`).join("");
+  return `<div class="wrap result">
+    <div class="sec"><div class="k">YOUR READY REPORT</div>
+      <div class="vs"><div class="you"><span class="who">YOU</span><span class="d">${r.ready}</span><span class="u">DAYS</span></div>
+        <div class="alex"><span class="who">ALEX</span><span class="d">${CONFIG.alexDays}</span><span class="u">DAYS</span></div></div>
+      <p class="verdict">${verdict(r)}</p>
+    </div>
+    <div class="scorebox"><span class="n">${r.score}</span><p>Your SCORE. The higher it is, the more of your life one button can switch off.</p></div>
+    <div class="sec"><div class="k">WHAT BREAKS FIRST</div>
+      <div class="timeline">${tl}<div class="tl goal"><div class="when">DAY 30</div><div class="what">Alex's goal. And yours.</div></div></div></div>
+    <div class="sec"><div class="k">YOUR LAYERS</div>${layerBars(r)}</div>
+    <div class="sec"><div class="k">YOUR FIRST 7 MOVES · ${r.n} ${r.n>1?"PEOPLE":"PERSON"}</div>
+      <div class="moves">${mv.map((m,i)=>`<div class="move"><div class="dn">D${i+1}</div><div><b>${esc(m.t)}</b><span>${esc(m.d)}</span></div></div>`).join("")}</div>
+      <p class="small">That's week one. Days 8 to 30 are in the plan.</p></div>
+    ${offer("full")}
+    <footer class="foot"><div>The story is fiction. The risk is real.</div><div>This is preparation, not financial, legal or medical advice.</div></footer>
+  </div>`;
+}
+
 function render(){
-  app.innerHTML = S.view==="home" ? viewHome() : S.view==="quiz" ? viewQuiz() : viewResult();
-  const f = document.getElementById("mail");
-  if (f) f.addEventListener("submit", submitMail);
+  renderHud();
+  app.innerHTML = S.view==="home" ? viewHome() : S.view==="quiz" ? viewQuiz() : S.full ? viewFull() : viewTeaser();
+  const f = document.getElementById("mail"); if (f) f.addEventListener("submit", submitMail);
 }
 
 async function submitMail(e){
   e.preventDefault();
-  const email = document.getElementById("email").value.trim();
-  const err = document.getElementById("mailerr");
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.textContent = "Please enter a valid email."; err.hidden = false; return; }
+  const email = document.getElementById("email").value.trim(), err = document.getElementById("mailerr");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.textContent = "That email doesn't look right."; err.hidden = false; return; }
   err.hidden = true;
-  const r = scores();
   const fd = new FormData();
-  fd.append("EMAIL", email);
-  fd.append("BREAKDOWN", S.ans.join(""));   // 15 answers; the email links back to ?r=<answers>
-  fd.append("email_address_check", "");
-  fd.append("locale", "en");
+  fd.append("EMAIL", email); fd.append("BREAKDOWN", S.ans.join("")); fd.append("email_address_check", ""); fd.append("locale", "en");
   try{
-    if (CONFIG.leadUrl) await fetch(CONFIG.leadUrl, {method:"POST", body:fd, mode:"no-cors"});
-    track("ScoreEmail", {score:r.total});
-    document.getElementById("mail").hidden = true;
-    document.getElementById("mailok").hidden = false;
-  }catch(x){
-    err.textContent = "Couldn't send right now. Check your connection and try again."; err.hidden = false;
-  }
+    await fetch(CONFIG.leadUrl, {method:"POST", body:fd, mode:"no-cors"});
+    track("ReportEmail", {ready: calc().ready});
+    document.getElementById("mail").hidden = true; document.getElementById("mailok").hidden = false;
+  }catch(x){ err.textContent = "Couldn't send. Check your connection and try again."; err.hidden = false; }
 }
 
-app.addEventListener("click", e => {
+document.addEventListener("click", e => {
   const t = e.target.closest("button,a"); if (!t) return;
-  if (t.dataset.go === "quiz"){ S.view="quiz"; S.i=0; S.ans=[]; track("StartCheck"); render(); scrollTo(0,0); return; }
-  if (t.hasAttribute("data-back")){ if (S.i===0){ S.view="home"; } else S.i--; render(); return; }
+  if (t.dataset.go === "quiz"){ S.view="quiz"; S.i=0; S.ans=[]; S.full=false; track("StartCheck"); render(); scrollTo(0,0); return; }
+  if (t.hasAttribute("data-back")){ if (S.i===0) S.view="home"; else S.i--; render(); return; }
   if (t.dataset.ans !== undefined){
-    S.ans[S.i] = +t.dataset.ans;
-    t.classList.add("sel");
-    setTimeout(() => { if (S.i < Q.length-1){ S.i++; } else { S.view="result"; track("ScoreShown", {score:scores().total}); } render(); scrollTo(0,0); }, 160);
+    S.ans[S.i] = +t.dataset.ans; t.classList.add("sel");
+    setTimeout(() => { if (S.i < Q.length-1) S.i++; else { S.view="result"; track("ReadyShown", {ready: calc().ready}); } render(); scrollTo(0,0); }, 170);
     return;
   }
-  if (t.dataset.buy){ track("ClickBuy", {where:t.dataset.buy}); if (!CONFIG.checkoutUrl){ e.preventDefault(); } }
+  if (t.dataset.buy) track("ClickBuy", {where:t.dataset.buy});
 });
+
 (function restore(){
   try{
     const r = new URLSearchParams(location.search).get("r") || "";
-    if (/^[0-3]{15}$/.test(r)){ S.ans = r.split("").map(Number); S.view = "result"; S.fromEmail = true; }
+    if (new RegExp("^[0-3]{" + Q.length + "}$").test(r)){ S.ans = r.split("").map(Number); S.view = "result"; S.full = true; }
   }catch(e){}
 })();
 render();
