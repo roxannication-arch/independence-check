@@ -113,8 +113,8 @@ input[type=email]:focus{border-color:var(--red);outline:none}
 <script>
 /* ================== CONFIG: fill these in ================== */
 const CONFIG = {
-  checkoutUrl: "",          // Whop checkout link for early access
-  brevoFormUrl: "",         // Brevo form action URL (https://...sibforms.com/serve/...)
+  checkoutUrl: "https://commas.com/checkout/DDRZxndcYL2ZbKT",  // Commas checkout, early access $39
+  leadUrl: "",              // Google Apps Script web app URL (saves lead, sends report via Brevo)
   priceNow: 39, priceLater: 59, priceDate: "October 25",
   accessDate: "October 25"
 };
@@ -299,16 +299,13 @@ async function submitMail(e){
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.textContent = "Please enter a valid email."; err.hidden = false; return; }
   err.hidden = true;
   const r = scores();
-  const fd = new FormData();
-  fd.append("EMAIL", email);
-  fd.append("SCORE", r.total);
-  fd.append("TIER", r.tier.name);
-  fd.append("WEAKEST", CUTS[r.weakest].name);
-  ORDER.forEach(k => fd.append("S_" + k.toUpperCase(), r.per[k]));
-  fd.append("email_address_check", "");
-  fd.append("locale", "en");
+  const body = new URLSearchParams({
+    email, score: r.total, tier: r.tier.name, weakest: CUTS[r.weakest].name,
+    breakdown: ORDER.map(k => CUTS[k].name + ":" + r.per[k]).join(","),
+    answers: S.ans.join(""), src: location.search.slice(1)
+  });
   try{
-    if (CONFIG.brevoFormUrl) await fetch(CONFIG.brevoFormUrl, {method:"POST", body:fd, mode:"no-cors"});
+    if (CONFIG.leadUrl) await fetch(CONFIG.leadUrl, {method:"POST", body, mode:"no-cors"});
     track("ScoreEmail", {score:r.total});
     document.getElementById("mail").hidden = true;
     document.getElementById("mailok").hidden = false;
