@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>How much of your life do you own? · 30 Days Ready</title>
-<meta name="description" content="Check your independence score in 2 minutes. Then need the system less, one legal step a day for 30 days.">
-<meta property="og:title" content="How much of your life do you still own?">
+<title>Unethical but Legal · Your Independence Score</title>
+<meta name="description" content="Legal ways to need the government less. Check your independence score in 2 minutes, then take it back one legal step a day.">
+<meta property="og:title" content="Unethical but legal ways to be free from the government">
 <meta property="og:description" content="Check your independence score. Free. 2 minutes.">
 <meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
@@ -235,10 +235,9 @@ const S = {view:"home", i:0, ans:[], full:false, src:"d"};
   else { const m = (q.get("r")||"").match(/-([sld])$/); if (m) S.src = m[1]; }
 }catch(e){} })();
 const HERO = {
-  d:{eyebrow:"If your card froze tonight", stamp:"Account frozen", plate:"", line:`How much of your life <em>do you still own?</em>`,
-     sub:`Money, food, water, power. All of it runs through systems you don't control. <b>Take the 2-minute check.</b> Get your independence score and the first thing that breaks.`},
   l:{eyebrow:"Unethical but legal", stamp:"100% legal", plate:"Part 1 of 100", line:`Legal ways to need <em>the government less.</em>`,
      sub:`Water, food, power, money, papers. Every step is legal, and most cost less than you think. <b>Start with your number:</b> how long your home lasts without the system.`},
+  get d(){ return this.l; },
   s:{eyebrow:"The Last Employee · you vote", stamp:"Account frozen", plate:"Day 1", line:`They're taking what you own. <em>Step by step.</em>`,
      sub:`<b>How many days would your home last?</b> Water, food, power, cash. Take the 2-minute check. Get your number and the first thing that breaks.`}
 };
@@ -314,7 +313,7 @@ const ALEX_SVG = `<svg viewBox="0 0 160 200" aria-label="Alex" role="img">
   <path d="M70 96 h20" stroke="#000" stroke-width="4" stroke-linecap="round"/>
 </svg>`;
 
-const TICKER_HEAD = {s:["THEY'RE TAKING YOUR OWNERSHIP STEP BY STEP","WAKE UP"], l:["UNETHICAL BUT LEGAL","EVERY STEP IS LEGAL"], d:["HOW MUCH OF YOUR LIFE DO YOU OWN?"]};
+const TICKER_HEAD = {s:["THEY'RE TAKING YOUR OWNERSHIP STEP BY STEP","WAKE UP"], l:["UNETHICAL BUT LEGAL","EVERY STEP IS LEGAL"], d:["UNETHICAL BUT LEGAL","EVERY STEP IS LEGAL"]};
 const TICKER = ["CHECK YOUR INDEPENDENCE SCORE · FREE","ONE CUT A DAY · 30 DAYS","WATER · FOOD · POWER · MONEY · SIGNAL · PAPERS · PEOPLE","EARLY ACCESS $39 · UNTIL OCT 25","THE STORY IS FICTION. THE RISK IS REAL."];
 const LADDER = [["80+","Everything works.",""],["< 80","No flights. No loans.",""],["< 60","Approved stores only.",""],["< 40","The system picks your home.",""],["< 20","Your account is run for you. Daily allowance.",""],["0","Frozen.","red"]];
 const EVIDENCE = [
@@ -419,7 +418,7 @@ function viewHome(){
     <a class="btn alt" href="${CONFIG.checkoutUrl}" target="_blank" rel="noopener" data-buy="faq">Get early access · $${CONFIG.priceNow}</a>
   </section>
 
-  <footer class="foot"><div>@30daysready · the story you vote, new episode 7PM ET</div><div>@thelegalexit · unethical but legal, one step per part</div><div>This is preparation, not financial, legal or medical advice.</div></footer>
+  <footer class="foot"><div>@thelegalexit · unethical but legal, one step per part</div><div>@30daysready · the story you vote, new episode 7PM ET</div><div>This is preparation, not financial, legal or medical advice.</div></footer>
   </div>
   <div class="stickybar"><div class="wrap"><span>How independent are you?</span><button data-go="quiz">Check my score</button></div></div>`;
 }
