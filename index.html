@@ -191,6 +191,8 @@ input[type=email]::placeholder{color:var(--tertiary)}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
+<script>window.goatcounter = {no_onload: true};</script>
+<script data-goatcounter="https://endofjobs.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
 <div class="hud" id="hud"></div>
@@ -242,7 +244,12 @@ const HERO = {
 };
 const app = document.getElementById("app"), hud = document.getElementById("hud");
 const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const track = (n,d) => { try{ if(window.fbq) fbq("trackCustom", n, d||{}); }catch(e){} };
+const SRCNAME = () => ({s:"story", l:"legal", d:"direct"})[S.src] || "direct";
+const gc = (path, title, event) => { const go = () => { try{ window.goatcounter.count({path, title, event}); }catch(e){} };
+  if (window.goatcounter && window.goatcounter.count) go(); else { let n=0; const t=setInterval(()=>{ if((window.goatcounter&&window.goatcounter.count)||++n>40){ clearInterval(t); go(); } },250); } };
+const EVT = {StartCheck:"quiz-start", ReadyShown:"quiz-done", ReportEmail:"email-left", ClickBuy:"buy-click", Purchase:"purchase", BuyerEmail:"buyer-email"};
+const track = (n,d) => { try{ if(window.fbq) fbq("trackCustom", n, d||{}); }catch(e){}
+  if (EVT[n]) gc(EVT[n] + "/" + SRCNAME(), EVT[n], true); };
 const val = id => { const k = Q.findIndex(q => q.id===id); const a = S.ans[k]; return a==null ? null : Q[k].a[a][1]; };
 
 function calc(){
@@ -581,6 +588,7 @@ document.addEventListener("click", e => {
     if (new RegExp("^[0-3]{" + Q.length + "}$").test(r)){ S.ans = r.split("").map(Number); S.view = "result"; S.full = true; }
   }catch(e){}
 })();
+gc(S.view==="paid" ? "/paid" : S.full ? "/report/" + SRCNAME() : "/home/" + SRCNAME(), document.title, false);
 render();
 </script>
 </body>
