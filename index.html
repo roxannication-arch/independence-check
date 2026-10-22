@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>How independent are you? · 30 Days Ready</title>
-<meta name="description" content="What if the government froze your life? Check your independence score, then unhook from the system in 30 days.">
-<meta property="og:title" content="They're taking what you own. Step by step.">
+<title>How much of your life do you own? · 30 Days Ready</title>
+<meta name="description" content="Check your independence score in 2 minutes. Then need the system less, one legal step a day for 30 days.">
+<meta property="og:title" content="How much of your life do you still own?">
 <meta property="og:description" content="Check your independence score. Free. 2 minutes.">
 <meta name="theme-color" content="#141B23">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -243,7 +243,21 @@ const CORE = ["food","water","power","money"];
 const NAME = {food:"Food", water:"Water", power:"Power", money:"Money"};
 const BREAKS = {power:"Your phone dies. The lights are out.", water:"Clean water runs out.", money:"You can't pay for anything.", food:"The kitchen is empty."};
 
-const S = {view:"home", i:0, ans:[], full:false};
+const S = {view:"home", i:0, ans:[], full:false, src:"d"};
+(function(){ try{
+  const q = new URLSearchParams(location.search), v = ((q.get("src")||"")+" "+(q.get("utm_source")||"")+" "+(q.get("utm_campaign")||"")).toLowerCase();
+  if (/story|30daysready|alex|lastemployee/.test(v)) S.src = "s";
+  else if (/legal|thelegalexit|unethical/.test(v)) S.src = "l";
+  else { const m = (q.get("r")||"").match(/-([sld])$/); if (m) S.src = m[1]; }
+}catch(e){} })();
+const HERO = {
+  d:{eyebrow:"IF YOUR CARD FROZE TONIGHT", stamp:"ACCOUNT FROZEN", plate:"", line:`How much of your life<br><em>do you still own?</em>`,
+     sub:`Money, food, water, power. All of it runs through systems you don't control. <b>Take the 2-minute check.</b> Get your independence score and the first thing that breaks.`},
+  l:{eyebrow:"UNETHICAL BUT LEGAL", stamp:"100% LEGAL", plate:"PART 1 OF 100", line:`Legal ways to need<br><em>the government less.</em>`,
+     sub:`Water, food, power, money, papers. Every step is legal, and most cost less than you think. <b>Start with your number:</b> how long your home lasts without the system.`},
+  s:{eyebrow:"THE LAST EMPLOYEE · YOU VOTE", stamp:"ACCOUNT FROZEN", plate:"DAY 1", line:`They're taking what you own.<br><em>Step by step.</em>`,
+     sub:`<b>How many days would your home last?</b> Water, food, power, cash. Take the 2-minute check. Get your number and the first thing that breaks.`}
+};
 const app = document.getElementById("app"), hud = document.getElementById("hud");
 const esc = t => String(t).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const track = (n,d) => { try{ if(window.fbq) fbq("trackCustom", n, d||{}); }catch(e){} };
@@ -288,6 +302,7 @@ function moves(r){
 function renderHud(){
   if (S.view === "paid"){ hud.innerHTML = `<div class="wrap"><div class="cell score"><span class="k">ALEX</span><span class="v">DAY 1</span></div><span class="tag">EARLY ACCESS</span><div class="cell ready"><span class="k">READY</span><span class="v">2d</span></div></div>`; return; }
   let score = 100, ready;
+  if (S.view === "home" && S.src !== "s"){ hud.innerHTML = `<div class="wrap"><div class="cell score"><span class="k">INDEPENDENCE</span><span class="v">?</span></div><span class="tag">YOU</span><div class="cell ready"><span class="k">READY</span><span class="v">?</span></div></div>`; return; }
   if (S.view === "home") ready = CONFIG.alexDays;
   else { const answered = CORE.filter(k => val(k)!=null);
     score = S.ans.length > 2 ? calc().indep : 0;
@@ -310,7 +325,8 @@ const ALEX_SVG = `<svg viewBox="0 0 160 200" aria-label="Alex" role="img">
   <path d="M70 96 h20" stroke="#000" stroke-width="4" stroke-linecap="round"/>
 </svg>`;
 
-const TICKER = ["THEY'RE TAKING YOUR OWNERSHIP STEP BY STEP","WAKE UP","CHECK YOUR INDEPENDENCE SCORE · FREE","ONE CUT A DAY · 30 DAYS","WATER · FOOD · POWER · MONEY · SIGNAL · PAPERS · PEOPLE","EARLY ACCESS $39 · UNTIL OCT 25","THE STORY IS FICTION. THE RISK IS REAL."];
+const TICKER_HEAD = {s:["THEY'RE TAKING YOUR OWNERSHIP STEP BY STEP","WAKE UP"], l:["UNETHICAL BUT LEGAL","EVERY STEP IS LEGAL"], d:["HOW MUCH OF YOUR LIFE DO YOU OWN?"]};
+const TICKER = ["CHECK YOUR INDEPENDENCE SCORE · FREE","ONE CUT A DAY · 30 DAYS","WATER · FOOD · POWER · MONEY · SIGNAL · PAPERS · PEOPLE","EARLY ACCESS $39 · UNTIL OCT 25","THE STORY IS FICTION. THE RISK IS REAL."];
 const LADDER = [["80+","Everything works.",""],["< 80","No flights. No loans.",""],["< 60","Approved stores only.",""],["< 40","The system picks your home.",""],["< 20","Your account is run for you. Daily allowance.",""],["0","Frozen.","red"]];
 const EVIDENCE = [
   {k:"CANADA · FEB 2022", t:"At least 257 accounts frozen", d:"Bank accounts, corporate accounts and credit cards, frozen under emergency powers during the trucker protests.", src:"Public Safety Canada", url:"https://www.publicsafety.gc.ca/cnt/trnsprnc/brfng-mtrls/prlmntry-bndrs/20221005/14-en.aspx"},
@@ -346,20 +362,20 @@ const FAQ = [
 
 function viewHome(){
   return `
-  <div class="ticker" aria-hidden="true"><div class="tk">${(TICKER.join("  ■  ")+"  ■  ").repeat(3)}</div></div>
+  <div class="ticker" aria-hidden="true"><div class="tk">${(TICKER_HEAD[S.src].concat(TICKER).join("  ■  ")+"  ■  ").repeat(3)}</div></div>
   <div class="wrap">
   <section class="frame">
-    <div class="eyebrow">IF YOUR CARD FROZE TONIGHT</div>
+    <div class="eyebrow">${HERO[S.src].eyebrow}</div>
     <div class="panel">
       <div class="scene"><div class="sky"></div>
         <div class="bldg" style="left:6%;width:22%;height:62%"></div>
         <div class="bldg" style="right:4%;width:26%;height:74%"></div>
-        <div class="stamp">ACCOUNT FROZEN</div>
-        <div class="plate" style="right:12px;top:12px">DAY 1</div>
+        <div class="stamp">${HERO[S.src].stamp}</div>
+        ${HERO[S.src].plate ? `<div class="plate" style="right:12px;top:12px">${HERO[S.src].plate}</div>` : ""}
         ${ALEX_SVG}</div>
       <div class="caption">
-        <p class="line">They're taking what you own.<br><em>Step by step.</em></p>
-        <p class="sub"><b>How many days would your home last?</b> Water, food, power, cash. Take the 2-minute check. Get your number and the first thing that breaks.</p>
+        <p class="line">${HERO[S.src].line}</p>
+        <p class="sub">${HERO[S.src].sub}</p>
       </div>
     </div>
     <button class="btn" data-go="quiz">Check my independence score</button>
@@ -383,9 +399,9 @@ function viewHome(){
   </section>
 
   <section class="sec block">
-    <div class="k">THE STORY · YOU VOTE</div>
-    <h2 class="h">Alex woke up<br><em>on day 1.</em></h2>
-    <p class="lead">In Alex's world cash is illegal. All money lives in one app, and a score from 0 to 100 decides how he lives. Every episode they take one more thing. He has 2 days of independence. He's going for 30. Every day you vote his next move.</p>
+    <div class="k">${S.src==="s" ? "THE STORY · YOU VOTE" : "ALSO ON INSTAGRAM · THE STORY YOU VOTE"}</div>
+    <h2 class="h">${S.src==="s" ? "Alex woke up<br><em>on day 1.</em>" : "Meet Alex.<br><em>He runs the same 30 days.</em>"}</h2>
+    <p class="lead">${S.src==="s" ? "" : "Alex is the guide inside the app, and the hero of our daily story on @30daysready. "}In Alex's world cash is illegal. All money lives in one app, and a score from 0 to 100 decides how he lives. Every episode they take one more thing. He has 2 days of independence. He's going for 30. Every day you vote his next move.</p>
     <div class="ladder">${LADDER.map(([s,t,c])=>`<div class="rung ${c}"><b>${s}</b><span>${t}</span></div>`).join("")}</div>
     <div class="steps3">
       <div><b>01</b><span>A new episode drops at 7PM ET.</span></div>
@@ -413,7 +429,7 @@ function viewHome(){
     <a class="btn alt" href="${CONFIG.checkoutUrl}" target="_blank" rel="noopener" data-buy="faq">Get early access · $${CONFIG.priceNow}</a>
   </section>
 
-  <footer class="foot"><div>@30daysready · new episode every day at 7PM ET</div><div>This is preparation, not financial, legal or medical advice.</div></footer>
+  <footer class="foot"><div>@30daysready · the story you vote, new episode 7PM ET</div><div>@thelegalexit · unethical but legal, one step per part</div><div>This is preparation, not financial, legal or medical advice.</div></footer>
   </div>
   <div class="stickybar"><div class="wrap"><span>How independent are you?</span><button data-go="quiz">Check my score</button></div></div>`;
 }
@@ -428,10 +444,9 @@ function viewQuiz(){
 }
 
 function verdict(r){
-  if (r.ready < CONFIG.alexDays) return `You're behind Alex.<br><em>He's only on day 1.</em>`;
-  if (r.ready === CONFIG.alexDays) return `You're exactly where<br><em>Alex started.</em>`;
-  if (r.ready < 14) return `You're ahead of Alex.<br><em>For now.</em>`;
-  return `You're further than most.<br><em>Not at 30 yet.</em>`;
+  if (r.ready <= 3) return `A few days.<br><em>Like most homes.</em>`;
+  if (r.ready < 14) return `About a week.<br><em>Not a month.</em>`;
+  return `Further than most.<br><em>Not at 30 yet.</em>`;
 }
 function indepBox(r){
   return `<div class="scorebox"><span class="n" style="color:var(--ready);font-size:44px">${r.indep}</span><p><b style="color:#fff">Your independence score, out of 100.</b><br>Without the system, your home lasts ${r.ready} ${r.ready===1?"day":"days"}. Here's what breaks first.</p></div>`;
@@ -444,7 +459,7 @@ function offer(where){
   return `<section class="offer">
     <div class="small" style="color:#55606C;font-family:var(--num);font-weight:700;letter-spacing:.12em">EARLY ACCESS · OPENS ${CONFIG.accessDate.toUpperCase()}</div>
     <h2>Take your life back in 30 days</h2>
-    <p>A web app on your phone from Alex. It walks you out of the system one step a day, built for your home.</p>
+    <p>A web app on your phone. Alex, your guide inside, walks you out of the system one step a day, built for your home.</p>
     <ul>
       <li>A web app. Add it to your home screen. One task a day, 10 to 30 minutes.</li>
       <li>Water, food, power, money, signal, papers, people.</li>
@@ -464,7 +479,7 @@ function viewTeaser(){
   return `<div class="wrap result">
     ${indepBox(r)}
     <div class="vs"><div class="you"><span class="who">YOU</span><span class="d">${r.ready}</span><span class="u">DAYS</span></div>
-      <div class="alex"><span class="who">ALEX</span><span class="d">${CONFIG.alexDays}</span><span class="u">DAYS</span></div></div>
+      <div class="alex"><span class="who">ALEX · DAY 1</span><span class="d">${CONFIG.alexDays}</span><span class="u">DAYS</span></div></div>
     <p class="verdict">${verdict(r)}</p>
     ${layerBars(r)}
     <section class="locked" id="report">
@@ -493,11 +508,11 @@ function viewFull(){
     <div class="sec"><div class="k">YOUR INDEPENDENCE REPORT</div>
       ${indepBox(r)}
       <div class="vs"><div class="you"><span class="who">YOU</span><span class="d">${r.ready}</span><span class="u">DAYS</span></div>
-        <div class="alex"><span class="who">ALEX</span><span class="d">${CONFIG.alexDays}</span><span class="u">DAYS</span></div></div>
+        <div class="alex"><span class="who">ALEX · DAY 1</span><span class="d">${CONFIG.alexDays}</span><span class="u">DAYS</span></div></div>
       <p class="verdict">${verdict(r)}</p>
     </div>
     <div class="sec"><div class="k">WHAT BREAKS FIRST</div>
-      <div class="timeline">${tl}<div class="tl goal"><div class="when">DAY 30</div><div class="what">Alex's goal. And yours.</div></div></div></div>
+      <div class="timeline">${tl}<div class="tl goal"><div class="when">DAY 30</div><div class="what">The goal. A month on your own.</div></div></div></div>
     <div class="sec"><div class="k">YOUR LAYERS</div>${layerBars(r)}</div>
     <div class="sec"><div class="k">YOUR FIRST 7 MOVES · ${r.n} ${r.n>1?"PEOPLE":"PERSON"}</div>
       <div class="moves">${mv.map((m,i)=>`<div class="move"><div class="dn">D${i+1}</div><div><b>${esc(m.t)}</b><span>${esc(m.d)}</span></div></div>`).join("")}</div>
@@ -555,7 +570,7 @@ async function submitMail(e){
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ err.textContent = "That email doesn't look right."; err.hidden = false; return; }
   err.hidden = true;
   const fd = new FormData();
-  fd.append("EMAIL", email); fd.append("BREAKDOWN", S.ans.join("")); fd.append("email_address_check", ""); fd.append("locale", "en");
+  fd.append("EMAIL", email); fd.append("BREAKDOWN", S.ans.join("") + "-" + S.src); fd.append("email_address_check", ""); fd.append("locale", "en");
   try{
     await fetch(CONFIG.leadUrl, {method:"POST", body:fd, mode:"no-cors"});
     track("ReportEmail", {ready: calc().ready});
@@ -579,7 +594,7 @@ document.addEventListener("click", e => {
   try{
     const qs = new URLSearchParams(location.search);
     if (qs.has("paid")){ S.view = "paid"; track("Purchase"); return; }
-    const r = qs.get("r") || "";
+    const r = (qs.get("r") || "").replace(/-[sld]$/, "");
     if (new RegExp("^[0-3]{" + Q.length + "}$").test(r)){ S.ans = r.split("").map(Number); S.view = "result"; S.full = true; }
   }catch(e){}
 })();
